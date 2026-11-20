@@ -16,6 +16,7 @@
       --gold: #f59e0b;
       --gold-dark: #d97706;
       --gold-soft: rgba(245, 158, 11, 0.14);
+      --btn-text: #ffffff;
       --green: #10b981;
       --green-soft: rgba(16, 185, 129, 0.14);
       --red: #ef4444;
@@ -33,10 +34,65 @@
       --gold: #d97706;
       --gold-dark: #b45309;
       --gold-soft: rgba(217, 119, 6, 0.12);
+      --btn-text: #ffffff;
       --green: #059669;
       --green-soft: rgba(5, 150, 105, 0.12);
       --red: #dc2626;
       --shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+    }
+
+    [data-theme="yellow"] {
+      --bg-main: #09090b;
+      --bg-card: #121215;
+      --bg-input: #1c1c21;
+      --bg-elevated: #27272a;
+      --border: rgba(250, 204, 21, 0.22);
+      --text-primary: #fafafa;
+      --text-secondary: #a1a1aa;
+      --gold: #facc15;
+      --gold-dark: #eab308;
+      --gold-soft: rgba(250, 204, 21, 0.16);
+      --btn-text: #09090b;
+      --green: #22c55e;
+      --green-soft: rgba(34, 197, 94, 0.15);
+      --red: #ef4444;
+      --shadow: 0 12px 32px rgba(0, 0, 0, 0.65);
+    }
+
+    [data-theme="ocean"] {
+      --bg-main: #070d19;
+      --bg-card: #0f172a;
+      --bg-input: #1e293b;
+      --bg-elevated: #263449;
+      --border: rgba(56, 189, 248, 0.18);
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --gold: #38bdf8;
+      --gold-dark: #0284c7;
+      --gold-soft: rgba(56, 189, 248, 0.15);
+      --btn-text: #070d19;
+      --green: #10b981;
+      --green-soft: rgba(16, 185, 129, 0.14);
+      --red: #f43f5e;
+      --shadow: 0 12px 32px rgba(2, 6, 23, 0.6);
+    }
+
+    [data-theme="emerald"] {
+      --bg-main: #06110d;
+      --bg-card: #0c1f18;
+      --bg-input: #132e24;
+      --bg-elevated: #193d30;
+      --border: rgba(52, 211, 153, 0.18);
+      --text-primary: #ecfdf5;
+      --text-secondary: #a7f3d0;
+      --gold: #34d399;
+      --gold-dark: #059669;
+      --gold-soft: rgba(52, 211, 153, 0.15);
+      --btn-text: #06110d;
+      --green: #10b981;
+      --green-soft: rgba(16, 185, 129, 0.15);
+      --red: #ef4444;
+      --shadow: 0 12px 32px rgba(0, 0, 0, 0.55);
     }
 
     * {
@@ -80,14 +136,20 @@
       width: 40px;
       height: 40px;
       border-radius: 12px;
-      background: linear-gradient(135deg, #f59e0b, #b45309);
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      color: #fff;
+      color: var(--btn-text);
       font-weight: 900;
       font-size: 18px;
+      user-select: none;
+      cursor: pointer;
+    }
+
+    .logo-box:active {
+      transform: scale(0.94);
     }
 
     .brand-info {
@@ -291,7 +353,7 @@
 
     .chip.active {
       background: var(--gold);
-      color: #fff;
+      color: var(--btn-text);
       border-color: var(--gold);
     }
 
@@ -304,16 +366,16 @@
 
     .btn-primary {
       width: 100%;
-      background: linear-gradient(135deg, #f59e0b, #d97706);
-      color: #fff;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: var(--btn-text);
       border: none;
       padding: 14px;
       border-radius: 14px;
       font-size: 15px;
-      font-weight: 700;
+      font-weight: 800;
       cursor: pointer;
       margin-top: 6px;
-      box-shadow: 0 6px 18px rgba(245, 158, 11, 0.3);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
     }
 
     .btn-primary:disabled {
@@ -339,7 +401,7 @@
 
     .theme-selector {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(2, 1fr);
       gap: 8px;
     }
 
@@ -347,12 +409,16 @@
       background: var(--bg-input);
       border: 1px solid var(--border);
       color: var(--text-primary);
-      padding: 12px 8px;
+      padding: 12px 10px;
       border-radius: 12px;
       font-size: 13px;
       font-weight: 600;
       cursor: pointer;
       text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
     }
 
     .theme-option.active {
@@ -369,7 +435,7 @@
       background: var(--bg-card);
       border-top: 1px solid var(--border);
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       padding: 8px 6px 12px;
       z-index: 50;
     }
@@ -446,7 +512,7 @@
 
   <header class="header">
     <div class="brand">
-      <div class="logo-box">GS</div>
+      <div class="logo-box" onclick="handleSecretLogoTap()" title="Garant service">GS</div>
       <div class="brand-info">
         <div class="brand-title">Garant <span>service</span></div>
         <div class="owner-badge">Владелец: Абдуллажон Халматов</div>
@@ -577,7 +643,8 @@
     <section id="tab-admin" class="section">
       <div id="adminLoginBox" class="card">
         <div class="card-header">
-          <span class="card-title">Вход для владельца / разработчика</span>
+          <span class="card-title">Скрытый вход для владельца</span>
+          <button class="theme-quick-btn" onclick="closeAdminSection()">✕ Закрыть</button>
         </div>
         <div class="form-group">
           <label>Логин</label>
@@ -593,7 +660,7 @@
       <div id="adminPanel" style="display:none;">
         <div class="card">
           <div class="card-header">
-            <span class="card-title">Заявки клиентов</span>
+            <span class="card-title">Заявки клиентов (Бокс)</span>
             <button class="theme-quick-btn" onclick="logoutAdmin()">Выйти</button>
           </div>
           <div id="ordersList"></div>
@@ -605,10 +672,14 @@
       <div class="card">
         <div class="card-header">
           <span class="card-title">Оформление приложения</span>
+          <span class="req-badge">6 стилей</span>
         </div>
         <div class="theme-selector">
-          <button class="theme-option" id="opt-dark" onclick="setTheme('dark')">🌙 Темная</button>
+          <button class="theme-option" id="opt-dark" onclick="setTheme('dark')">🌙 Тёмная</button>
+          <button class="theme-option" id="opt-yellow" onclick="setTheme('yellow')">⚡ Жёлто-чёрная</button>
           <button class="theme-option" id="opt-light" onclick="setTheme('light')">☀️ Светлая</button>
+          <button class="theme-option" id="opt-ocean" onclick="setTheme('ocean')">💎 Синий графит</button>
+          <button class="theme-option" id="opt-emerald" onclick="setTheme('emerald')">🌿 Изумрудная</button>
           <button class="theme-option" id="opt-system" onclick="setTheme('system')">📱 Системная</button>
         </div>
       </div>
@@ -634,72 +705,4 @@
           Если возник сбой или ошибка в работе приложения, напишите разработчику в WhatsApp: <strong>+996 556 50 49 69</strong>
         </p>
         <div class="form-group">
-          <textarea id="bugText" class="input" rows="3" placeholder="Опишите проблему или ошибку..."></textarea>
-        </div>
-        <button class="btn-secondary" onclick="sendBugWhatsApp()">💬 Отправить в WhatsApp разработчику</button>
-      </div>
-    </section>
-
-  </main>
-
-  <nav class="bottom-nav">
-    <button class="nav-btn active" onclick="switchTab('client', this)">
-      <span>📝</span>
-      <span>Запись</span>
-    </button>
-    <button class="nav-btn" onclick="switchTab('reviews', this)">
-      <span>⭐</span>
-      <span>Отзывы</span>
-    </button>
-    <button class="nav-btn" onclick="switchTab('admin', this)">
-      <span>🔐</span>
-      <span>Бокс / Вход</span>
-    </button>
-    <button class="nav-btn" onclick="switchTab('settings', this)">
-      <span>⚙️</span>
-      <span>Настройки</span>
-    </button>
-  </nav>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getDatabase, ref, push, set, onValue, update, remove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
-
-    const firebaseConfig = {
-      databaseURL: "https://garant-service-d9715-default-rtdb.europe-west1.firebasedatabase.app"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-    const ordersRef = ref(db, 'orders');
-    const reviewsRef = ref(db, 'reviews');
-
-    let orders = [];
-    let reviews = [];
-    let lastKnownStatus = null;
-
-    // --- ЗАПРОС РАЗРЕШЕНИЯ НА УВЕДОМЛЕНИЯ ПРИ ВХОДЕ ---
-    async function requestNotificationPermissionOnStart() {
-      if ('Notification' in window && Notification.permission === 'default') {
-        try {
-          await Notification.requestPermission();
-        } catch (e) {
-          // Игнорируем, если среда запрещает вызов без клика
-        }
-      }
-    }
-    requestNotificationPermissionOnStart();
-
-    // Повторная попытка при первом касании экрана, если системное окно требовало жеста пользователя
-    document.addEventListener('pointerdown', () => {
-      if ('Notification' in window && Notification.permission === 'default') {
-        Notification.requestPermission().catch(() => {});
-      }
-    }, { once: true });
-
-    function sendAutoNotification(title, body) {
-      window.showToast(title, body);
-      if ('Notification' in window && Notification.permission === 'granted') {
-        try {
-          new Notification(title, { body });
-    
+          <textarea id="bugText" class="input" rows="3" placeholder="О
