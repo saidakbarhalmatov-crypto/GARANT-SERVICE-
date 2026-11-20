@@ -1,722 +1,385 @@
-<!DOCTYPE html>
-<html lang="ru" data-theme="dark">
+<!doctype html>
+<html lang="ru">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>Garant service — Замена масла №1 в Кызыл-Кия</title>
-  <style>
-    :root, [data-theme="dark"] {
-      --bg-main: #0b0d12;
-      --bg-card: #141821;
-      --bg-input: #1c222e;
-      --bg-elevated: #232a38;
-      --border: rgba(255, 255, 255, 0.1);
-      --text-primary: #f8fafc;
-      --text-secondary: #94a3b8;
-      --gold: #f59e0b;
-      --gold-dark: #d97706;
-      --gold-soft: rgba(245, 158, 11, 0.15);
-      --btn-text: #ffffff;
-      --green: #10b981;
-      --green-soft: rgba(16, 185, 129, 0.15);
-      --red: #ef4444;
-      --shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
-    }
-
-    [data-theme="yellow"] {
-      --bg-main: #09090b;
-      --bg-card: #121215;
-      --bg-input: #1c1c21;
-      --bg-elevated: #27272a;
-      --border: rgba(250, 204, 21, 0.25);
-      --text-primary: #fafafa;
-      --text-secondary: #a1a1aa;
-      --gold: #facc15;
-      --gold-dark: #eab308;
-      --gold-soft: rgba(250, 204, 21, 0.16);
-      --btn-text: #09090b;
-      --green: #22c55e;
-      --green-soft: rgba(34, 197, 94, 0.15);
-      --red: #ef4444;
-      --shadow: 0 10px 28px rgba(0, 0, 0, 0.65);
-    }
-
-    [data-theme="light"] {
-      --bg-main: #f1f5f9;
-      --bg-card: #ffffff;
-      --bg-input: #f8fafc;
-      --bg-elevated: #e2e8f0;
-      --border: rgba(15, 23, 42, 0.12);
-      --text-primary: #0f172a;
-      --text-secondary: #475569;
-      --gold: #d97706;
-      --gold-dark: #b45309;
-      --gold-soft: rgba(217, 119, 6, 0.12);
-      --btn-text: #ffffff;
-      --green: #059669;
-      --green-soft: rgba(5, 150, 105, 0.12);
-      --red: #dc2626;
-      --shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
-    }
-
-    [data-theme="ocean"] {
-      --bg-main: #070d19;
-      --bg-card: #0f172a;
-      --bg-input: #1e293b;
-      --bg-elevated: #263449;
-      --border: rgba(56, 189, 248, 0.2);
-      --text-primary: #f1f5f9;
-      --text-secondary: #94a3b8;
-      --gold: #38bdf8;
-      --gold-dark: #0284c7;
-      --gold-soft: rgba(56, 189, 248, 0.15);
-      --btn-text: #070d19;
-      --green: #10b981;
-      --green-soft: rgba(16, 185, 129, 0.15);
-      --red: #f43f5e;
-      --shadow: 0 10px 28px rgba(2, 6, 23, 0.6);
-    }
-
-    [data-theme="emerald"] {
-      --bg-main: #06110d;
-      --bg-card: #0c1f18;
-      --bg-input: #132e24;
-      --bg-elevated: #193d30;
-      --border: rgba(52, 211, 153, 0.2);
-      --text-primary: #ecfdf5;
-      --text-secondary: #a7f3d0;
-      --gold: #34d399;
-      --gold-dark: #059669;
-      --gold-soft: rgba(52, 211, 153, 0.15);
-      --btn-text: #06110d;
-      --green: #10b981;
-      --green-soft: rgba(16, 185, 129, 0.15);
-      --red: #ef4444;
-      --shadow: 0 10px 28px rgba(0, 0, 0, 0.55);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    }
-
-    body {
-      background: var(--bg-main);
-      color: var(--text-primary);
-      min-height: 100vh;
-      padding-bottom: calc(95px + env(safe-area-inset-bottom));
-      transition: background 0.25s ease, color 0.25s ease;
-    }
-
-    button svg, button span, .logo-box * {
-      pointer-events: none;
-    }
-
-    .ico {
-      width: 17px;
-      height: 17px;
-      stroke: currentColor;
-      fill: none;
-      stroke-width: 2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      flex-shrink: 0;
-      display: inline-block;
-      vertical-align: middle;
-    }
-
-    .ico-sm {
-      width: 14px;
-      height: 14px;
-    }
-
-    .header {
-      position: sticky;
-      top: 0;
-      z-index: 40;
-      background: var(--bg-card);
-      border-bottom: 1px solid var(--border);
-      padding: 12px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      box-shadow: var(--shadow);
-    }
-
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      min-width: 0;
-    }
-
-    .logo-box {
-      width: 44px;
-      height: 44px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      color: var(--btn-text);
-      font-weight: 900;
-      font-size: 18px;
-      user-select: none;
-      cursor: pointer;
-    }
-
-    .logo-box:active {
-      transform: scale(0.92);
-    }
-
-    .brand-info {
-      min-width: 0;
-    }
-
-    .brand-title {
-      font-size: 17px;
-      font-weight: 800;
-      letter-spacing: 0.3px;
-      color: var(--text-primary);
-    }
-
-    .brand-title span {
-      color: var(--gold);
-    }
-
-    .owner-badge {
-      font-size: 11px;
-      color: var(--text-secondary);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      margin-top: 2px;
-    }
-
-    .theme-quick-btn {
-      background: var(--bg-input);
-      border: 1px solid var(--border);
-      color: var(--text-primary);
-      padding: 9px 12px;
-      border-radius: 10px;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      flex-shrink: 0;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .top-tabs {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 6px;
-      max-width: 520px;
-      margin: 12px auto 0;
-      padding: 0 16px;
-    }
-
-    .top-tab-btn {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      color: var(--text-secondary);
-      padding: 11px 6px;
-      border-radius: 12px;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-    }
-
-    .top-tab-btn.active {
-      background: var(--gold-soft);
-      border-color: var(--gold);
-      color: var(--gold);
-    }
-
-    .container {
-      max-width: 520px;
-      margin: 0 auto;
-      padding: 14px 16px;
-    }
-
-    .hero-card {
-      background: linear-gradient(145deg, var(--bg-card), var(--bg-elevated));
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 18px;
-      margin-bottom: 16px;
-      box-shadow: var(--shadow);
-    }
-
-    .hero-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-      gap: 6px;
-    }
-
-    .city-pill {
-      background: var(--gold-soft);
-      color: var(--gold);
-      font-size: 11px;
-      font-weight: 700;
-      padding: 5px 10px;
-      border-radius: 999px;
-      text-transform: uppercase;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-    }
-
-    .status-pill {
-      background: var(--green-soft);
-      color: var(--green);
-      font-size: 11px;
-      font-weight: 700;
-      padding: 5px 10px;
-      border-radius: 999px;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .status-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--green);
-      display: inline-block;
-    }
-
-    .hero-card h1 {
-      font-size: 20px;
-      font-weight: 800;
-      line-height: 1.25;
-      margin-bottom: 8px;
-    }
-
-    .hero-card p {
-      font-size: 13px;
-      color: var(--text-secondary);
-      line-height: 1.45;
-      margin-bottom: 14px;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      border-top: 1px solid var(--border);
-      padding-top: 12px;
-      text-align: center;
-    }
-
-    .stat-val {
-      font-size: 14px;
-      font-weight: 800;
-      color: var(--gold);
-    }
-
-    .stat-lbl {
-      font-size: 11px;
-      color: var(--text-secondary);
-      margin-top: 2px;
-    }
-
-    .card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 18px;
-      margin-bottom: 16px;
-      box-shadow: var(--shadow);
-    }
-
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 14px;
-      gap: 8px;
-    }
-
-    .card-title {
-      font-size: 16px;
-      font-weight: 700;
-    }
-
-    .req-badge {
-      font-size: 11px;
-      background: var(--gold-soft);
-      color: var(--gold);
-      padding: 4px 8px;
-      border-radius: 8px;
-      font-weight: 600;
-    }
-
-    .form-group {
-      margin-bottom: 13px;
-    }
-
-    .form-group label {
-      display: block;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text-secondary);
-      margin-bottom: 6px;
-    }
-
-    .input {
-      width: 100%;
-      background: var(--bg-input);
-      border: 1px solid var(--border);
-      color: var(--text-primary);
-      padding: 12px 14px;
-      border-radius: 12px;
-      font-size: 14px;
-      outline: none;
-    }
-
-    .input:focus {
-      border-color: var(--gold);
-    }
-
-    .row-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
-    .chips-scroll {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      padding-bottom: 4px;
-    }
-
-    .chip {
-      background: var(--bg-input);
-      border: 1px solid var(--border);
-      color: var(--text-primary);
-      padding: 9px 12px;
-      border-radius: 12px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-
-    .chip.active {
-      background: var(--gold);
-      color: var(--btn-text);
-      border-color: var(--gold);
-    }
-
-    .time-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 7px;
-      margin-bottom: 8px;
-    }
-
-    .btn-primary {
-      width: 100%;
-      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-      color: var(--btn-text);
-      border: none;
-      padding: 14px;
-      border-radius: 14px;
-      font-size: 15px;
-      font-weight: 800;
-      cursor: pointer;
-      margin-top: 6px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      text-decoration: none;
-    }
-
-    .btn-primary:disabled {
-      opacity: 0.45;
-      cursor: not-allowed;
-    }
-
-    .btn-secondary {
-      width: 100%;
-      background: var(--bg-input);
-      color: var(--text-primary);
-      border: 1px solid var(--border);
-      padding: 12px;
-      border-radius: 12px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      text-align: center;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-    }
-
-    .theme-selector {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-    }
-
-    .theme-option {
-      background: var(--bg-input);
-      border: 1px solid var(--border);
-      color: var(--text-primary);
-      padding: 13px 10px;
-      border-radius: 12px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 7px;
-    }
-
-    .theme-option.active {
-      border-color: var(--gold);
-      background: var(--gold-soft);
-      color: var(--gold);
-    }
-
-    .bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      background: var(--bg-card);
-      border-top: 1px solid var(--border);
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      padding: 10px 6px calc(12px + env(safe-area-inset-bottom));
-      z-index: 60;
-    }
-
-    .nav-btn {
-      background: none;
-      border: none;
-      color: var(--text-secondary);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      padding: 4px 0;
-    }
-
-    .nav-btn.active {
-      color: var(--gold);
-    }
-
-    .toast {
-      position: fixed;
-      top: 14px;
-      left: 50%;
-      transform: translateX(-50%) translateY(-160%);
-      width: calc(100% - 32px);
-      max-width: 480px;
-      background: var(--bg-card);
-      border: 2px solid var(--gold);
-      color: var(--text-primary);
-      padding: 14px 16px;
-      border-radius: 16px;
-      z-index: 100;
-      box-shadow: var(--shadow);
-      transition: transform 0.35s ease;
-    }
-
-    .toast.show {
-      transform: translateX(-50%) translateY(0);
-    }
-
-    .star-row {
-      display: flex;
-      gap: 8px;
-      cursor: pointer;
-      margin: 6px 0 12px;
-    }
-
-    .star-item {
-      width: 30px;
-      height: 30px;
-      color: var(--gold);
-      background: none;
-      border: none;
-      cursor: pointer;
-    }
-
-    .star-item svg {
-      width: 28px;
-      height: 28px;
-      stroke: currentColor;
-      fill: currentColor;
-      stroke-width: 1.5;
-    }
-
-    .order-item {
-      background: var(--bg-input);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 13px;
-      margin-bottom: 10px;
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#101114">
+<title>Garant Service — Запись на обслуживание</title>
+<style>
+:root{--bg:#101114;--panel:#191b20;--panel2:#22252b;--text:#f4f4f5;--muted:#a6a8b0;--gold:#e7b94f;--line:#343740;--danger:#ef6868;--ok:#4fc58b;--shadow:0 16px 45px #0005}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;transition:.2s}
+body[data-theme="yellow"]{--bg:#17140c;--panel:#231e11;--panel2:#302817;--gold:#ffd34e}
+body[data-theme="light"]{--bg:#f2f3f5;--panel:#fff;--panel2:#e9ebef;--text:#20232a;--muted:#666b75;--line:#d8dbe1;--shadow:0 12px 35px #0001}
+body[data-theme="ocean"]{--bg:#09171e;--panel:#10232d;--panel2:#19313d;--gold:#5cc7df}
+body[data-theme="emerald"]{--bg:#0d1914;--panel:#14251d;--panel2:#1d3529;--gold:#65d39b}
+body[data-theme="system"]{color-scheme:dark}
+button,input,select,textarea{font:inherit}button{cursor:pointer}
+.wrap{width:min(1100px,calc(100% - 30px));margin:auto}
+header{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--bg) 90%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.nav{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:12px;font-weight:850;letter-spacing:.5px}
+.logo{width:44px;height:44px;border:1px solid var(--gold);border-radius:14px;display:grid;place-items:center;color:var(--gold);font-weight:900;user-select:none}
+.brand small{display:block;color:var(--muted);font-size:11px;letter-spacing:2px}
+.nav-actions{display:flex;align-items:center;gap:8px}
+.btn{border:1px solid var(--line);border-radius:12px;padding:10px 15px;background:var(--panel2);color:var(--text);font-weight:650}
+.btn.primary{background:var(--gold);border-color:var(--gold);color:#17130a}
+.btn.ghost{background:transparent}.btn:disabled{opacity:.5;cursor:not-allowed}
+.hero{padding:62px 0 34px;display:grid;grid-template-columns:1.2fr .8fr;gap:25px;align-items:center}
+.eyebrow{color:var(--gold);font-weight:750;letter-spacing:2px;font-size:12px}
+h1{font-size:clamp(34px,6vw,58px);line-height:1.04;margin:12px 0 16px}
+h2{font-size:25px;margin:0 0 8px}.muted{color:var(--muted)}
+.hero-card,.card{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:24px;box-shadow:var(--shadow)}
+.hero-card{min-height:210px;display:flex;flex-direction:column;justify-content:center}
+.hero-mark{font-size:48px;color:var(--gold);font-weight:900}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;padding:20px 0 55px}
+.full{grid-column:1/-1}
+label{display:block;font-size:13px;font-weight:700;margin:13px 0 6px;color:var(--muted)}
+input,select,textarea{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:11px;background:var(--bg);color:var(--text);outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px color-mix(in srgb,var(--gold) 18%,transparent)}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-actions{margin-top:18px;display:flex;gap:10px;flex-wrap:wrap}
+.notice{font-size:12px;color:var(--muted);margin-top:10px}
+.stars{display:flex;gap:5px;margin:8px 0}.star{border:0;background:none;color:#747780;font-size:28px;padding:0}.star.active{color:var(--gold)}
+.review{border-top:1px solid var(--line);padding:14px 0}.review:first-child{border-top:0}
+.review strong{display:inline-block;margin-right:8px}.review p{margin:5px 0}
+.pill{display:inline-block;border:1px solid var(--line);border-radius:99px;padding:3px 9px;font-size:11px;color:var(--muted)}
+footer{border-top:1px solid var(--line);padding:25px 0 40px;color:var(--muted);font-size:13px}
+.modal{position:fixed;inset:0;background:#000a;display:none;align-items:center;justify-content:center;padding:18px;z-index:20}
+.modal.show{display:flex}.modalbox{width:min(520px,100%);max-height:90vh;overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:22px;box-shadow:var(--shadow)}
+.modalhead{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.admin-list{max-height:50vh;overflow:auto}.admin-item{border:1px solid var(--line);border-radius:13px;padding:13px;margin:10px 0}
+.admin-item p{margin:4px 0}.admin-item .btn{padding:7px 10px;font-size:13px;margin:5px 5px 0 0}
+.status{color:var(--gold);font-size:12px;font-weight:700}
+#toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:11px 16px;box-shadow:var(--shadow);display:none;z-index:40;max-width:calc(100% - 30px)}
+#toast.show{display:block}
+@media(max-width:720px){.hero{grid-template-columns:1fr;padding-top:40px}.grid{grid-template-columns:1fr}.full{grid-column:auto}.nav{align-items:flex-start;padding:12px 0}.nav-actions{flex-wrap:wrap;justify-content:flex-end}.nav-actions .btn{padding:8px 10px}.row{grid-template-columns:1fr}}
+</style>
 </head>
-<body>
-
-  <div id="toast" class="toast">
-    <div id="toastTitle" style="font-weight:800; color:var(--gold); font-size:14px;">Garant service</div>
-    <div id="toastBody" style="font-size:13px; margin-top:4px;">Уведомление</div>
+<body data-theme="dark">
+<header><div class="wrap nav">
+  <div class="brand"><div class="logo" id="secretLogo" title="Garant Service">GS</div><div>GARANT SERVICE<small>АВТОСЕРВИС · ЗАПИСЬ ОНЛАЙН</small></div></div>
+  <div class="nav-actions">
+    <select id="themeSelect" aria-label="Тема оформления" style="width:auto;padding:9px 10px">
+      <option value="dark">Dark</option><option value="yellow">Yellow</option><option value="light">Light</option><option value="ocean">Ocean</option><option value="emerald">Emerald</option><option value="system">System</option>
+    </select>
+    <a class="btn ghost" href="#contact" style="text-decoration:none">Контакты</a>
   </div>
-
-  <header class="header">
-    <div class="brand">
-      <div class="logo-box" id="secretLogo" onclick="openAdminTap()">GS</div>
-      <div class="brand-info">
-        <div class="brand-title">Garant <span>service</span></div>
-        <div class="owner-badge">Владелец: Абдуллажон Халматов</div>
-      </div>
+</div></header>
+<main class="wrap">
+  <section class="hero">
+    <div><div class="eyebrow">НАДЁЖНОЕ ОБСЛУЖИВАНИЕ</div><h1>Ваш автомобиль<br><span style="color:var(--gold)">в надёжных руках.</span></h1>
+      <p class="muted">Запишитесь на обслуживание онлайн. Выберите удобную дату и время — мы свяжемся с вами для подтверждения.</p>
+      <a class="btn primary" href="#booking" style="display:inline-block;text-decoration:none;margin-top:10px">Записаться на сервис</a>
     </div>
-    <button type="button" class="theme-quick-btn" id="headerThemeBtn" onclick="nextTheme()">
-      <svg class="ico ico-sm" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
-      <span id="headerThemeLabel">Тёмная</span>
-    </button>
-  </header>
+    <div class="hero-card"><div class="hero-mark">GS</div><h2>Garant Service</h2><p class="muted">Удобная запись · Внимательный сервис · Прозрачная коммуникация</p><span class="pill" id="connectionState">Проверяем соединение…</span></div>
+  </section>
+  <section class="grid">
+    <div class="card" id="booking">
+      <div class="eyebrow">ОНЛАЙН-ЗАПИСЬ</div><h2>Записаться на обслуживание</h2><p class="muted">Заполните данные — заявка отправится в нашу базу.</p>
+      <form id="bookingForm">
+        <label for="clientName">Ваше имя</label><input id="clientName" maxlength="70" required autocomplete="name" placeholder="Например, Саидакбар">
+        <div class="row"><div><label for="phone">Телефон</label><input id="phone" required maxlength="25" autocomplete="tel" placeholder="+996 …"></div>
+        <div><label for="car">Марка и модель</label><input id="car" required maxlength="80" placeholder="Toyota Camry"></div></div>
+        <label for="service">Услуга</label><select id="service" required><option value="">Выберите услугу</option><option>Замена масла</option><option>Замена фильтров</option><option>Диагностика</option><option>Техническое обслуживание</option><option>Другое</option></select>
+        <div class="row"><div><label for="date">Дата</label><input id="date" type="date" required></div><div><label for="time">Время</label><select id="time" required><option value="">Выберите время</option><option>09:00</option><option>10:00</option><option>11:00</option><option>12:00</option><option>13:00</option><option>14:00</option><option>15:00</option><option>16:00</option><option>17:00</option><option>18:00</option></select></div></div>
+        <label for="comment">Комментарий (необязательно)</label><textarea id="comment" rows="3" maxlength="500" placeholder="Дополнительная информация"></textarea>
+        <div class="form-actions"><button class="btn primary" type="submit" id="submitOrder">Отправить заявку</button></div>
+        <div class="notice">Отправляя форму, вы соглашаетесь на обработку указанных данных для связи по заявке.</div>
+      </form>
+    </div>
+    <div class="card">
+      <div class="eyebrow">ОТЗЫВЫ КЛИЕНТОВ</div><h2>Поделитесь впечатлением</h2><p class="muted">Оставьте оценку и короткий отзыв.</p>
+      <form id="reviewForm">
+        <label for="reviewName">Имя</label><input id="reviewName" maxlength="70" required placeholder="Ваше имя">
+        <label>Ваша оценка</label><div class="stars" id="starPicker" aria-label="Оценка от 1 до 5">
+          <button class="star" type="button" data-star="1" aria-label="1 звезда">★</button><button class="star" type="button" data-star="2" aria-label="2 звезды">★</button><button class="star" type="button" data-star="3" aria-label="3 звезды">★</button><button class="star" type="button" data-star="4" aria-label="4 звезды">★</button><button class="star" type="button" data-star="5" aria-label="5 звёзд">★</button>
+        </div>
+        <label for="reviewText">Отзыв</label><textarea id="reviewText" rows="4" maxlength="700" required placeholder="Расскажите о вашем опыте"></textarea>
+        <button class="btn primary" type="submit" id="submitReview">Отправить отзыв</button>
+        <p class="notice">Отзыв появится после проверки администратором.</p>
+      </form>
+      <div style="margin-top:22px"><h2 style="font-size:20px">Опубликованные отзывы</h2><div id="reviewsList"><p class="muted">Загружаем отзывы…</p></div></div>
+    </div>
+    <div class="card full" id="contact"><div class="eyebrow">GARANT SERVICE</div><h2>Связаться с нами</h2><p class="muted">Добавьте сюда актуальный номер телефона, адрес и ссылку WhatsApp. Пока эти контакты не указаны, кнопка связи не отображается.</p><p class="notice">Создатель приложения: Khalmatov Saidakbar Rashidjonovich</p></div>
+  </section>
+</main>
+<footer><div class="wrap">© <span id="year"></span> Garant Service. Все права защищены.</div></footer>
 
-  <div class="top-tabs">
-    <button type="button" class="top-tab-btn active" data-tab="client" onclick="openTab('client')">
-      <svg class="ico ico-sm" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-      <span>Запись</span>
-    </button>
-    <button type="button" class="top-tab-btn" data-tab="reviews" onclick="openTab('reviews')">
-      <svg class="ico ico-sm" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-      <span>Отзывы</span>
-    </button>
-    <button type="button" class="top-tab-btn" data-tab="settings" onclick="openTab('settings')">
-      <svg class="ico ico-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-      <span>Настройки</span>
-    </button>
+<div class="modal" id="adminModal" role="dialog" aria-modal="true" aria-labelledby="adminTitle">
+ <div class="modalbox"><div class="modalhead"><h2 id="adminTitle">Панель администратора</h2><button class="btn" id="closeAdmin" type="button">Закрыть</button></div>
+  <div id="loginArea"><p class="muted">Введите логин и пароль для открытия панели.</p><form id="loginForm"><label for="adminUsername">Логин</label><input id="adminUsername" type="text" autocomplete="username" required><label for="adminPassword">Пароль администратора</label><input id="adminPassword" type="password" autocomplete="current-password" required><button class="btn primary" style="margin-top:16px" type="submit">Войти</button></form></div>
+  <div id="adminArea" hidden><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><p class="muted" id="adminUser"></p><button class="btn" id="logoutBtn" type="button">Выйти</button></div>
+    <h3>Заявки</h3><div class="admin-list" id="ordersList">Загрузка…</div>
+    <h3>Отзывы на проверке</h3><div class="admin-list" id="pendingReviewsList">Загрузка…</div>
   </div>
+ </div>
+</div>
+<div id="toast" role="status" aria-live="polite"></div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
+import { getDatabase, ref, push, set, onValue, update, remove, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js";
 
-  <main class="container">
+const firebaseConfig = {
+  apiKey: "AIzaSyBlFc6ZwPTyfMJQ04Q-TMY3mFZkeV1LRY",
+  authDomain: "garant-service-d9715.firebaseapp.com",
+  databaseURL: "https://garant-service-d9715-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "garant-service-d9715",
+  storageBucket: "garant-service-d9715.firebasestorage.app",
+  messagingSenderId: "737969143646",
+  appId: "1:737969143646:web:90e0857ae3bda13d0019cf"
+};
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
 
-    <section id="tab-client" class="section" style="display:block;">
-      <div class="hero-card">
-        <div class="hero-top">
-          <span class="city-pill">
-            <svg class="ico ico-sm" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            Сервис №1 в г. Кызыл-Кия
-          </span>
-          <span class="status-pill"><span class="status-dot"></span>Бокс открыт</span>
-        </div>
-        <h1>Профессиональная замена масла без очередей</h1>
-        <p>Многолетний опыт работы, оригинальные масла и фильтры в наличии. Запишитесь на удобное время — мы подготовим всё к вашему приезду и автоматически напомним за 40 и 20 минут.</p>
-        <div class="stats-grid">
-          <div>
-            <div class="stat-val">20 мин</div>
-            <div class="stat-lbl">Точная работа</div>
-          </div>
-          <div>
-            <div class="stat-val">100%</div>
-            <div class="stat-lbl">Оригинал масла</div>
-          </div>
-          <div>
-            <div class="stat-val">40 / 20</div>
-            <div class="stat-lbl">Авто-напоминание</div>
-          </div>
-        </div>
-      </div>
+// Локальные данные входа в скрытую панель.
+// ВНИМАНИЕ: они видны в исходном HTML и не являются надёжной защитой.
+const ADMIN_USERNAME = "admin";
+const ADMIN_PASSWORD = "202";
 
-      <div id="clientActiveOrder" class="card" style="display:none; border-color: var(--gold);">
-        <div class="card-header">
-          <span class="card-title">Ваша активная запись</span>
-          <span class="req-badge" id="clientOrderStatus">Ждём вас</span>
-        </div>
-        <div id="clientOrderInfo" style="font-size:13px; line-height:1.5;"></div>
-        <div style="font-size:11px; color:var(--text-secondary); margin-top:10px; display:flex; align-items:center; gap:6px;">
-          <svg class="ico ico-sm" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-          <span>Автоматическое напоминание сработает за 40 и 20 минут до записи.</span>
-        </div>
-      </div>
+const $ = id => document.getElementById(id);
+let selectedStars = 0, logoTaps = 0, logoTimer = null, adminOrdersStop = null, pendingStop = null, adminUnlocked = false;
+const toast = message => { const el=$("toast"); el.textContent=message; el.classList.add("show"); setTimeout(()=>el.classList.remove("show"),3500); };
+const safe = value => String(value ?? "").replace(/[&<>"']/g, ch => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[ch]));
+const dateMin = new Date(); $("date").min = new Date(dateMin.getTime()-dateMin.getTimezoneOffset()*60000).toISOString().slice(0,10);
+$("year").textContent = new Date().getFullYear();
 
-      <div class="card">
-        <div class="card-header">
-          <span class="card-title">Анкета на замену масла</span>
-          <span class="req-badge">Все поля обязательны</span>
-        </div>
+function applyTheme(theme){
+  const actualTheme = theme === "system"
+    ? (window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark")
+    : theme;
+  document.body.setAttribute("data-theme", actualTheme);
+}
+$("themeSelect").addEventListener("change", e => {
+  applyTheme(e.target.value);
+});
+applyTheme($("themeSelect").value);
 
-        <div class="form-group">
-          <label>Имя и Фамилия *</label>
-          <input type="text" id="cName" class="input" placeholder="Например: Азамат Каримов" oninput="checkForm()" />
-        </div>
+$("starPicker").addEventListener("click", e=>{
+  const b=e.target.closest("[data-star]"); if(!b)return;
+  selectedStars=Number(b.dataset.star);
+  document.querySelectorAll(".star").forEach(s=>s.classList.toggle("active",Number(s.dataset.star)<=selectedStars));
+});
 
-        <div class="form-group">
-          <label>Ваш номер телефона *</label>
-          <input type="tel" id="cPhone" class="input" value="+996 " placeholder="+996 XXX XXX XXX" oninput="checkForm()" />
-        </div>
+$("bookingForm").addEventListener("submit", async e=>{
+  e.preventDefault();
+  const button=$("submitOrder"); button.disabled=true; button.textContent="Отправляем…";
+  const order={
+    name:$("clientName").value.trim(), phone:$("phone").value.trim(), car:$("car").value.trim(),
+    service:$("service").value, date:$("date").value, time:$("time").value,
+    comment:$("comment").value.trim(), status:"Новая", createdAt:Date.now()
+  };
+  try{
+    if(!order.name||!order.phone||!order.car||!order.service||!order.date||!order.time) throw new Error("Заполните все обязательные поля.");
+    await set(push(ref(db,"orders")),order);
+    $("bookingForm").reset(); $("date").min=new Date().toISOString().slice(0,10);
+    toast("Заявка отправлена! Мы свяжемся с вами для подтверждения.");
+  }catch(err){console.error(err);toast(err.code==="PERMISSION_DENIED"?"Firebase отклонил запись. Проверьте правила базы данных.":(err.message||"Не удалось отправить заявку."));}
+  finally{button.disabled=false;button.textContent="Отправить заявку";}
+});
 
-        <div class="row-2">
-          <div class="form-group">
-            <label>Марка авто *</label>
-            <input type="text" id="cBrand" class="input" placeholder="Toyota" oninput="checkForm()" />
-          </div>
-          <div class="form-group">
-            <label>Модель *</label>
-            <input type="text" id="cModel" class="input" placeholder="Camry 70" oninput="checkForm()" />
-          </div>
-        </div>
+$("reviewForm").addEventListener("submit", async e=>{
+  e.preventDefault();
+  if(!selectedStars){toast("Пожалуйста, выберите оценку.");return;}
+  const button=$("submitReview");button.disabled=true;button.textContent="Отправляем…";
+  try{
+    const review={name:$("reviewName").value.trim(),rating:selectedStars,text:$("reviewText").value.trim(),status:"pending",createdAt:Date.now()};
+    if(!review.name||!review.text)throw new Error("Заполните имя и текст отзыва.");
+    await set(push(ref(db,"reviews")),review);
+    $("reviewForm").reset();selectedStars=0;document.querySelectorAll(".star").forEach(s=>s.classList.remove("active"));
+    toast("Спасибо! Отзыв отправлен на проверку.");
+  }catch(err){console.error(err);toast(err.code==="PERMISSION_DENIED"?"Firebase отклонил отзыв. Проверьте правила базы данных.":(err.message||"Не удалось отправить отзыв."));}
+  finally{button.disabled=false;button.textContent="Отправить отзыв";}
+});
 
-        <div class="form-group">
-          <label>Государственный номер *</label>
-          <input type="text" id="cPlate" class="input" placeholder="01 KG 777 AAA" style="text-transform:uppercase;" oninput="checkForm()" />
-        </div>
+function renderReviews(data){
+  const list=$("reviewsList");list.replaceChildren();
+  const entries=Object.entries(data||{}).filter(([,r])=>r&&r.status==="approved").sort((a,b)=>(b[1].createdAt||0)-(a[1].createdAt||0));
+  if(!entries.length){list.innerHTML='<p class="muted">Пока нет опубликованных отзывов.</p>';return;}
+  entries.slice(0,20).forEach(([,r])=>{
+    const item=document.createElement("div");item.className="review";
+    const title=document.createElement("div");const name=document.createElement("strong");name.textContent=r.name||"Клиент";
+    const stars=document.createElement("span");stars.style.color="var(--gold)";stars.textContent="★".repeat(Math.max(0,Math.min(5,Number(r.rating)||0)));
+    title.append(name,stars);const p=document.createElement("p");p.textContent=r.text||"";item.append(title,p);list.append(item);
+  });
+}
+const approvedReviewsQuery=query(ref(db,"reviews"),orderByChild("status"),equalTo("approved"));
+onValue(approvedReviewsQuery, snap=>renderReviews(snap.val()), err=>{console.error(err);$("reviewsList").textContent="Не удалось загрузить отзывы. Проверьте правила базы.";});
+onValue(ref(db,".info/connected"), snap=>{
+  const connected=snap.val()===true;$("connectionState").textContent=connected?"Firebase подключён":"Нет соединения с Firebase";
+  $("connectionState").style.color=connected?"var(--ok)":"var(--danger)";
+});
 
-        <div class="form-group">
-          <label>Выберите день визита *</label>
-          <div class="chips-scroll" id="dayChips"></div>
-          <input type="date" id="cDate" class="input" style="margin-top:8px;" onchange="checkForm()" />
-        </div>
+function showAdmin(){ $("adminModal").classList.add("show"); }
+$("secretLogo").addEventListener("click",()=>{
+  logoTaps++;
+  clearTimeout(logoTimer);
+  logoTimer=setTimeout(()=>{logoTaps=0;},4000);
+  if(logoTaps>=5){
+    logoTaps=0;
+    clearTimeout(logoTimer);
+    showAdmin();
+  }
+});
+$("closeAdmin").addEventListener("click",()=> $("adminModal").classList.remove("show"));
+$("adminModal").addEventListener("click",e=>{if(e.target===$("adminModal"))$("adminModal").classList.remove("show");});
+$("loginForm").addEventListener("submit", e=>{
+  e.preventDefault();
+  if($("adminUsername").value.trim() === ADMIN_USERNAME && $("adminPassword").value === ADMIN_PASSWORD){
+    adminUnlocked = true;
+    $("loginArea").hidden = true;
+    $("adminArea").hidden = false;
+    $("adminUser").textContent = "Локальный вход администратора";
+    startAdminListeners();
+    $("adminPassword").value = "";
+    $("adminUsername").value = "";
+    toast("Панель открыта.");
+  } else {
+    toast("Неверный логин или пароль.");
+    $("adminPassword").value = "";
+  }
+});
+$("logoutBtn").addEventListener("click",()=>{
+  adminUnlocked = false;
+  stopAdminListeners();
+  $("adminArea").hidden = true;
+  $("loginArea").hidden = false;
+  $("ordersList").replaceChildren();
+  $("pendingReviewsList").replaceChildren();
+  toast("Вы вышли из панели.");
+});
 
-        <div class="form-group">
-          <label>Выберите своё время *</label>
-          <div class="time-grid" id="timeChips"></div>
-          <div class="row-2" style="margin-top:6px;">
-            <select id="cHour" class="input" onchange="syncTime()"></select>
-            <select id="cMin" class="input" onchange="syncTime()"></select>
-          </div>
-        </div>
+function adminCard(id,o){
+  const el=document.createElement("div");el.className="admin-item";
+  const title=document.createElement("strong");title.textContent=`${o.name||"Без имени"} · ${o.car||"Авто не указано"}`;
+  const details=document.createElement("p");details.textContent=`${o.phone||""} | ${o.service||""} | ${o.date||""} ${o.time||""}`;
+  const status=document.createElement("p");status.className="status";status.textContent=`Статус: ${o.status||"Новая"}`;
+  const comment=document.createElement("p");comment.className="muted";comment.textContent=o.comment||"";
+  el.append(title,details,status,comment);
+  ["Новая","Подтверждена","Выполнено","Отменена"].forEach(st=>{
+    const b=document.createElement("button");b.className="btn";b.textContent=st;b.addEventListener("click",async()=>{
+      try{await update(ref(db,`orders/${id}`),{status:st,updatedAt:Date.now()});toast("Статус заявки обновлён.");}
+      catch(err){console.error(err);toast("Не удалось изменить статус. Проверьте правила базы.");}
+    });el.append(b);
+  });
+  const del=document.createElement("button");del.className="btn";del.textContent="Удалить";del.addEventListener("click",async()=>{
+    if(!confirm("Удалить эту заявку?"))return;
+    try{await remove(ref(db,`orders/${id}`));toast("Заявка удалена.");}catch(err){console.error(err);toast("Не удалось удалить заявку.");}
+  });el.append(del);return el;
+}
+function pendingCard(id,r){
+  const el=document.createElement("div");el.className="admin-item";
+  const title=document.createElement("strong");title.textContent=`${r.name||"Клиент"} · ${"★".repeat(Number(r.rating)||0)}`;
+  const p=document.createElement("p");p.textContent=r.text||"";el.append(title,p);
+  const approve=document.createElement("button");approve.className=""btn";
+  approve.textContent="Одобрить";
+  approve.addEventListener("click",async()=>{
+    try{
+      await update(ref(db,`reviews/${id}`),{
+        status:"approved",
+        moderatedAt:Date.now()
+      });
+      toast("Отзыв опубликован.");
+    }catch(err){
+      console.error(err);
+      toast("Не удалось одобрить отзыв.");
+    }
+  });
 
-        <button type="button" id="submitBtn" class="btn-primary" disabled onclick="sendOrder()">Записаться на замену масла</button>
-      </div>
-    </section>
+  const reject=document.createElement("button");
+  reject.className="btn";
+  reject.textContent="Отклонить";
+  reject.addEventListener("click",async()=>{
+    try{
+      await update(ref(db,`reviews/${id}`),{
+        status:"rejected",
+        moderatedAt:Date.now()
+      });
+      toast("Отзыв отклонён.");
+    }catch(err){
+      console.error(err);
+      toast("Не удалось отклонить отзыв.");
+    }
+  });
 
-    <section id="tab-reviews" class="section" style="display:none;">
-      <div class="card">
-        <div class="card-header">
-          <span class="card-title">Оценить Garant service</span>
-          <span class="req-badge">Отзывы клиентов</span>
-        </div>
-        <div class="star-row" id="starPicker">
-          <button type="button" class="star-item" onclick="pickStars(1)"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.8
+  const del=document.createElement("button");
+  del.className="btn";
+  del.textContent="Удалить";
+  del.addEventListener("click",async()=>{
+    if(!confirm("Удалить этот отзыв?"))return;
+    try{
+      await remove(ref(db,`reviews/${id}`));
+      toast("Отзыв удалён.");
+    }catch(err){
+      console.error(err);
+      toast("Не удалось удалить отзыв.");
+    }
+  });
+
+  el.append(approve,reject,del);
+  return el;
+}
+
+function startAdminListeners(){
+  stopAdminListeners();
+
+  adminOrdersStop=onValue(ref(db,"orders"),snap=>{
+    const list=$("ordersList");
+    list.replaceChildren();
+    const data=snap.val()||{};
+    const entries=Object.entries(data).sort(
+      (a,b)=>(b[1].createdAt||0)-(a[1].createdAt||0)
+    );
+
+    if(!entries.length){
+      list.textContent="Заявок пока нет.";
+      return;
+    }
+
+    entries.forEach(([id,order])=>{
+      list.append(adminCard(id,order));
+    });
+  },err=>{
+    console.error(err);
+    $("ordersList").textContent="Ошибка загрузки заявок.";
+  });
+
+  pendingStop=onValue(
+    query(ref(db,"reviews"),orderByChild("status"),equalTo("pending")),
+    snap=>{
+      const list=$("pendingReviewsList");
+      list.replaceChildren();
+      const data=snap.val()||{};
+      const entries=Object.entries(data).sort(
+        (a,b)=>(b[1].createdAt||0)-(a[1].createdAt||0)
+      );
+
+      if(!entries.length){
+        list.textContent="Отзывов на проверке нет.";
+        return;
+      }
+
+      entries.forEach(([id,review])=>{
+        list.append(pendingCard(id,review));
+      });
+    },
+    err=>{
+      console.error(err);
+      $("pendingReviewsList").textContent="Ошибка загрузки отзывов.";
+    }
+  );
+}
+
+function stopAdminListeners(){
+  if(adminOrdersStop){
+    adminOrdersStop();
+    adminOrdersStop=null;
+  }
+
+  if(pendingStop){
+    pendingStop();
+    pendingStop=null;
+  }
+}
+</script>
+</body>
+</html>
