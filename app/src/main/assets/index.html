@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Garant service — Замена масла №1 в Кызыл-Кия</title>
+  <style>
+    :root, [data-theme="dark"] {
+      --bg-main: #0b0d12;
+      --bg-card: #141821;
+      --bg-input: #1c222e;
+      --bg-elevated: #232a38;
+      --border: rgba(255, 255, 255, 0.09);
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --gold: #f59e0b;
+      --gold-dark: #d97706;
+      --gold-soft: rgba(245, 158, 11, 0.14);
+      --green: #10b981;
+      --green-soft: rgba(16, 185, 129, 0.14);
+      --red: #ef4444;
+      --shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+    }
+
+    [data-theme="light"] {
+      --bg-main: #f1f5f9;
+      --bg-card: #ffffff;
+      --bg-input: #f8fafc;
+      --bg-elevated: #e2e8f0;
+      --border: rgba(15, 23, 42, 0.1);
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --gold: #d97706;
+      --gold-dark: #b45309;
+      --gold-soft: rgba(217, 119, 6, 0.12);
+      --green: #059669;
+      --green-soft: rgba(5, 150, 105, 0.12);
+      --red: #dc2626;
+      --shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background: var(--bg-main);
+      color: var(--text-primary);
+      min-height: 100vh;
+      padding-bottom: 92px;
+      transition: background 0.25s ease, color 0.25s ease;
+    }
+
+    .header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: var(--bg-card);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      box-shadow: var(--shadow);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .logo-box {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #f59e0b, #b45309);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: #fff;
+      font-weight: 900;
+      font-size: 18px;
+    }
+
+    .brand-info {
+      min-width: 0;
+    }
+
+    .brand-title {
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: 0.3px;
+      color: var(--text-primary);
+    }
+
+    .brand-title span {
+      color: var(--gold);
+    }
+
+    .owner-badge {
+      font-size: 11px;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-top: 2px;
+    }
+
+    .theme-quick-btn {
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 7px 11px;
+      border-radius: 10px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .container {
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 16px;
+    }
+
+    .hero-card {
+      background: linear-gradient(145deg, var(--bg-card), var(--bg-elevated));
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .city-pill {
+      background: var(--gold-soft);
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 5px 10px;
+      border-radius: 999px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .status-pill {
+      background: var(--green-soft);
+      color: var(--green);
+      font-size: 11px;
+      font-weight: 700;
+      padding: 5px 10px;
+      border-radius: 999px;
+    }
+
+    .hero-card h1 {
+      font-size: 20px;
+      font-weight: 800;
+      line-height: 1.25;
+      margin-bottom: 8px;
+    }
+
+    .hero-card p {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.45;
+      margin-bottom: 14px;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      border-top: 1px solid var(--border);
+      padding-top: 12px;
+      text-align: center;
+    }
+
+    .stat-val {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--gold);
+    }
+
+    .stat-lbl {
+      font-size: 11px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 18px;
+      margin-bottom: 16px;
+      box-shadow: var(--shadow);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .req-badge {
+      font-size: 11px;
+      background: var(--gold-soft);
+      color: var(--gold);
+      padding: 4px 8px;
+      border-radius: 8px;
+      font-weight: 600;
+    }
+
+    .form-group {
+      margin-bottom: 13px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 6px;
+    }
+
+    .input {
+      width: 100%;
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 12px 14px;
+      border-radius: 12px;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .input:focus {
+      border-color: var(--gold);
+    }
+
+    .row-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .chips-scroll {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .chip {
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 9px 12px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .chip.active {
+      background: var(--gold);
+      color: #fff;
+      border-color: var(--gold);
+    }
+
+    .time-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 7px;
+      margin-bottom: 8px;
+    }
+
+    .btn-primary {
+      width: 100%;
+      background: linear-gradient(135deg, #f59e0b, #d97706);
+      color: #fff;
+      border: none;
+      padding: 14px;
+      border-radius: 14px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 6px;
+      box-shadow: 0 6px 18px rgba(245, 158, 11, 0.3);
+    }
+
+    .btn-primary:disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    .btn-secondary {
+      width: 100%;
+      background: var(--bg-input);
+      color: var(--text-primary);
+      border: 1px solid var(--border);
+      padding: 12px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      text-decoration: none;
+      display: block;
+    }
+
+    .theme-selector {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .theme-option {
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      color: var(--text-primary);
+      padding: 12px 8px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .theme-option.active {
+      border-color: var(--gold);
+      background: var(--gold-soft);
+      color: var(--gold);
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: var(--bg-card);
+      border-top: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding: 8px 6px 12px;
+      z-index: 50;
+    }
+
+    .nav-btn {
+      background: none;
+      border: none;
+      color: var(--text-secondary);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .nav-btn.active {
+      color: var(--gold);
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    .toast {
+      position: fixed;
+      top: 14px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-130%);
+      width: calc(100% - 32px);
+      max-width: 480px;
+      background: var(--bg-card);
+      border: 2px solid var(--gold);
+      color: var(--text-primary);
+      padding: 14px 16px;
+      border-radius: 16px;
+      z-index: 100;
+      box-shadow: var(--shadow);
+      transition: transform 0.35s ease;
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .star-row {
+      display: flex;
+      gap: 8px;
+      font-size: 26px;
+      cursor: pointer;
+      margin: 6px 0 12px;
+    }
+
+    .order-item {
+      background: var(--bg-input);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 13px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="toast" class="toast">
+    <div id="toastTitle" style="font-weight:800; color:var(--gold); font-size:14px;">Garant service</div>
+    <div id="toastBody" style="font-size:13px; margin-top:4px;">Уведомление</div>
+  </div>
+
+  <header class="header">
+    <div class="brand">
+      <div class="logo-box">GS</div>
+      <div class="brand-info">
+        <div class="brand-title">Garant <span>service</span></div>
+        <div class="owner-badge">Владелец: Абдуллажон Халматов</div>
+      </div>
+    </div>
+    <button class="theme-quick-btn" onclick="cycleTheme()" id="headerThemeBtn">🌓 Тема</button>
+  </header>
+
+  <main class="container">
+
+    <section id="tab-client" class="section active">
+      <div class="hero-card">
+        <div class="hero-top">
+          <span class="city-pill">★ Сервис №1 в г. Кызыл-Кия</span>
+          <span class="status-pill">● Бокс открыт</span>
+        </div>
+        <h1>Профессиональная замена масла без очередей</h1>
+        <p>Многолетний опыт работы, оригинальные масла и фильтры в наличии. Запишитесь на удобное время — мы подготовим всё к вашему приезду и напомним за 40 и 20 минут.</p>
+        <div class="stats-grid">
+          <div>
+            <div class="stat-val">20 мин</div>
+            <div class="stat-lbl">Точная работа</div>
+          </div>
+          <div>
+            <div class="stat-val">100%</div>
+            <div class="stat-lbl">Оригинал масла</div>
+          </div>
+          <div>
+            <div class="stat-val">40 / 20</div>
+            <div class="stat-lbl">Авто-напоминание</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="clientActiveOrder" class="card" style="display:none; border-color: var(--gold);">
+        <div class="card-header">
+          <span class="card-title">Ваша активная запись</span>
+          <span class="req-badge" id="clientOrderStatus">Ждём вас</span>
+        </div>
+        <div id="clientOrderInfo" style="font-size:13px; line-height:1.5; margin-bottom:12px;"></div>
+        <div class="row-2">
+          <button class="btn-secondary" onclick="triggerReminder(40, 'Клиент')">🔔 Тест 40 мин</button>
+          <button class="btn-secondary" onclick="triggerReminder(20, 'Клиент')">🔥 Тест 20 мин</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Анкета на замену масла</span>
+          <span class="req-badge">Все поля обязательны</span>
+        </div>
+
+        <div class="form-group">
+          <label>Имя и Фамилия *</label>
+          <input type="text" id="cName" class="input" placeholder="Например: Азамат Каримов" oninput="validateForm()" />
+        </div>
+
+        <div class="form-group">
+          <label>Ваш номер телефона *</label>
+          <input type="tel" id="cPhone" class="input" value="+996 " placeholder="+996 XXX XXX XXX" oninput="validateForm()" />
+        </div>
+
+        <div class="row-2">
+          <div class="form-group">
+            <label>Марка авто *</label>
+            <input type="text" id="cBrand" class="input" placeholder="Toyota" oninput="validateForm()" />
+          </div>
+          <div class="form-group">
+            <label>Модель *</label>
+            <input type="text" id="cModel" class="input" placeholder="Camry 70" oninput="validateForm()" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Государственный номер *</label>
+          <input type="text" id="cPlate" class="input" placeholder="01 KG 777 AAA" style="text-transform:uppercase;" oninput="validateForm()" />
+        </div>
+
+        <div class="form-group">
+          <label>Выберите день визита *</label>
+          <div class="chips-scroll" id="dayChips"></div>
+          <input type="date" id="cDate" class="input" style="margin-top:8px;" onchange="validateForm()" />
+        </div>
+
+        <div class="form-group">
+          <label>Выберите своё время *</label>
+          <div class="time-grid" id="timeChips"></div>
+          <div class="row-2" style="margin-top:6px;">
+            <select id="cHour" class="input" onchange="syncCustomTime()"></select>
+            <select id="cMin" class="input" onchange="syncCustomTime()"></select>
+          </div>
+        </div>
+
+        <button id="submitBtn" class="btn-primary" disabled onclick="submitOrder()">Записаться на замену масла</button>
+      </div>
+    </section>
+
+    <section id="tab-reviews" class="section">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Оценить Garant service</span>
+          <span class="req-badge">Отзывы клиентов</span>
+        </div>
+        <div class="star-row" id="starPicker">
+          <span onclick="setStars(1)">★</span>
+          <span onclick="setStars(2)">★</span>
+          <span onclick="setStars(3)">★</span>
+          <span onclick="setStars(4)">★</span>
+          <span onclick="setStars(5)">★</span>
+        </div>
+        <div class="form-group">
+          <label>Ваше имя</label>
+          <input type="text" id="rName" class="input" placeholder="Ваше имя" />
+        </div>
+        <div class="form-group">
+          <label>Комментарий о работе мастера</label>
+          <textarea id="rText" class="input" rows="3" placeholder="Всё сделали быстро и аккуратно..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>Прикрепить фото или видео замены</label>
+          <input type="file" id="rMedia" class="input" accept="image/*,video/*" />
+        </div>
+        <button class="btn-primary" onclick="addReview()">Опубликовать отзыв</button>
+      </div>
+
+      <div id="reviewsList"></div>
+    </section>
+
+    <section id="tab-admin" class="section">
+      <div id="adminLoginBox" class="card">
+        <div class="card-header">
+          <span class="card-title">Вход для владельца / разработчика</span>
+        </div>
+        <div class="form-group">
+          <label>Логин</label>
+          <input type="text" id="loginUser" class="input" placeholder="Введите логин" />
+        </div>
+        <div class="form-group">
+          <label>Пароль</label>
+          <input type="password" id="loginPass" class="input" placeholder="Введите пароль" />
+        </div>
+        <button class="btn-primary" onclick="doLogin()">Войти в режим управления</button>
+      </div>
+
+      <div id="adminPanel" style="display:none;">
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Заявки клиентов</span>
+            <button class="theme-quick-btn" onclick="logoutAdmin()">Выйти</button>
+          </div>
+          <div class="row-2" style="margin-bottom:12px;">
+            <button class="btn-secondary" onclick="triggerReminder(40, 'Владелец')">⏰ Напомнить 40м</button>
+            <button class="btn-secondary" onclick="triggerReminder(20, 'Владелец')">🔥 Напомнить 20м</button>
+          </div>
+          <div id="ordersList"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="tab-settings" class="section">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Оформление приложения</span>
+        </div>
+        <div class="theme-selector">
+          <button class="theme-option" id="opt-dark" onclick="setTheme('dark')">🌙 Темная</button>
+          <button class="theme-option" id="opt-light" onclick="setTheme('light')">☀️ Светлая</button>
+          <button class="theme-option" id="opt-system" onclick="setTheme('system')">📱 Системная</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Связаться с владельцем</span>
+        </div>
+        <p style="font-size:13px; color:var(--text-secondary); margin-bottom:12px;">
+          Владелец сервиса: <strong>Абдуллажон Халматов</strong><br/>
+          Телефон: <strong>+996 552 202 215</strong>
+        </p>
+        <a href="tel:+996552202215" class="btn-primary" style="display:block; text-align:center; text-decoration:none;">
+          📞 Позвонить владельцу
+        </a>
+      </div>
+
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Техподдержка приложения</span>
+        </div>
+        <p style="font-size:13px; color:var(--text-secondary); margin-bottom:10px;">
+          Если возник сбой или ошибка в работе приложения, напишите разработчику в WhatsApp: <strong>+996 556 50 49 69</strong>
+        </p>
+        <div class="form-group">
+          <textarea id="bugText" class="input" rows="3" placeholder="Опишите проблему или ошибку..."></textarea>
+        </div>
+        <button class="btn-secondary" onclick="sendBugWhatsApp()">💬 Отправить в WhatsApp разработчику</button>
+      </div>
+    </section>
+
+  </main>
+
+  <nav class="bottom-nav">
+    <button class="nav-btn active" onclick="switchTab('client', this)">
+      <span>📝</span>
+      <span>Запись</span>
+    </button>
+    <button class="nav-btn" onclick="switchTab('reviews', this)">
+      <span>⭐</span>
+      <span>Отзывы</span>
+    </button>
+    <button class="nav-btn" onclick="switchTab('admin', this)">
+      <span>🔐</span>
+      <span>Бокс / Вход</span>
+    </button>
+    <button class="nav-btn" onclick="switchTab('settings', this)">
+      <span>⚙️</span>
+      <span>Настройки</span>
+    </button>
+  </nav>
+
+  <script>
+    let currentThemeMode = localStorage.getItem('gs_theme_mode') || 'system';
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+    function applyTheme() {
+      let effective = currentThemeMode;
+      if (currentThemeMode === 'system') {
+        effective = mediaQuery.matches ? 'dark' : 'light';
+      }
+      document.documentElement.setAttribute('data-theme', effective);
+
+      ['dark', 'light', 'system'].forEach(m => {
+        const el = document.getElementById('opt-' + m);
+        if (el) el.classList.toggle('active', currentThemeMode === m);
+      });
+
+      const labels = { dark: '🌙 Темная', light: '☀️ Светлая', system: '📱 Авто' };
+      document.getElementById('headerThemeBtn').textContent = labels[currentThemeMode];
+    }
+
+    function setTheme(mode) {
+      currentThemeMode = mode;
+      localStorage.setItem('gs_theme_mode', mode);
+      applyTheme();
+    }
+
+    function cycleTheme() {
+      const order = ['dark', 'light', 'system'];
+      const next = order[(order.indexOf(currentThemeMode) + 1) % order.length];
+      setTheme(next);
+    }
+
+    mediaQuery.addEventListener('change', () => {
+      if (currentThemeMode === 'system') applyTheme();
+    });
+    applyTheme();
+
+    function switchTab(tabId, btn) {
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + tabId).classList.add('active');
+      if (btn) btn.classList.add('active');
+    }
+
+    function showToast(title, body) {
+      document.getElementById('toastTitle').textContent = title;
+      document.getElementById('toastBody').textContent = body;
+      const t = document.getElementById('toast');
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 4500);
+    }
+
+    let selectedTime = '10:00';
+    const dayChips = document.getElementById('dayChips');
+    const cDate = document.getElementById('cDate');
+
+    for (let i = 0; i < 5; i++) {
+      const d = new Date();
+      d.setDate(d.getDate() + i);
+      const iso = d.toISOString().split('T')[0];
+      const label = i === 0 ? 'Сегодня' : i === 1 ? 'Завтра' : d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
+      const chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'chip' + (i === 0 ? ' active' : '');
+      chip.textContent = label;
+      chip.onclick = () => {
+        document.querySelectorAll('#dayChips .chip').forEach(c => c.classList.remove('active'));
+        chip.classList.add('active');
+        cDate.value = iso;
+        validateForm();
+      };
+      dayChips.appendChild(chip);
+      if (i === 0) cDate.value = iso;
+    }
+
+    const slots = ['09:00', '10:30', '12:00', '14:00', '15:30', '17:00', '18:30', '20:00'];
+    const timeChips = document.getElementById('timeChips');
+    slots.forEach((slot, idx) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'chip' + (idx === 0 ? ' active' : '');
+      b.textContent = slot;
+      b.onclick = () => {
+        document.querySelectorAll('#timeChips .chip').forEach(c => c.classList.remove('active'));
+        b.classList.add('active');
+        selectedTime = slot;
+        const [hh, mm] = slot.split(':');
+        document.getElementById('cHour').value = hh;
+        document.getElementById('cMin').value = mm;
+        validateForm();
+      };
+      timeChips.appendChild(b);
+    });
+
+    const cHour = document.getElementById('cHour');
+    const cMin = document.getElementById('cMin');
+    for (let h = 0; h < 24; h++) {
+      const v = String(h).padStart(2, '0');
+      cHour.innerHTML += `<option value="${v}">${v} ч</option>`;
+    }
+    for (let m = 0; m < 60; m += 5) {
+      const v = String(m).padStart(2, '0');
+      cMin.innerHTML += `<option value="${v}">${v} мин</option>`;
+    }
+    cHour.value = '09';
+    cMin.value = '00';
+    selectedTime = '09:00';
+
+    function syncCustomTime() {
+      selectedTime = `${cHour.value}:${cMin.value}`;
+      document.querySelectorAll('#timeChips .chip').forEach(c => c.classList.remove('active'));
+      validateForm();
+    }
+
+    let orders = JSON.parse(localStorage.getItem('gs_orders') || '[]');
+
+    function validateForm() {
+      const ok =
+        document.getElementById('cName').value.trim().length >= 2 &&
+        document.getElementById('cPhone').value.replace(/\D/g, '').length >= 12 &&
+        document.getElementById('cBrand').value.trim().length >= 2 &&
+        document.getElementById('cModel').value.trim().length >= 1 &&
+        document.getElementById('cPlate').value.trim().length >= 4 &&
+        cDate.value && selectedTime;
+      document.getElementById('submitBtn').disabled = !ok;
+    }
+
+    function submitOrder() {
+      const order = {
+        id: Date.now(),
+        name: document.getElementById('cName').value.trim(),
+        phone: document.getElementById('cPhone').value.trim(),
+        brand: document.getElementById('cBrand').value.trim(),
+        model: document.getElementById('cModel').value.trim(),
+        plate: document.getElementById('cPlate').value.trim().toUpperCase(),
+        date: cDate.value,
+        time: selectedTime,
+        status: 'Ожидает'
+      };
+      orders.unshift(order);
+      localStorage.setItem('gs_orders', JSON.stringify(orders));
+      localStorage.setItem('gs_my_order', JSON.stringify(order));
+      renderClientOrder();
+      renderAdminOrders();
+      showToast('Запись подтверждена!', `${order.brand} ${order.model} (${order.plate}) на ${order.date} в ${order.time}`);
+    }
+
+    function renderClientOrder() {
+      const my = JSON.parse(localStorage.getItem('gs_my_order') || 'null');
+      const box = document.getElementById('clientActiveOrder');
+      if (!my) { box.style.display = 'none'; return; }
+      box.style.display = 'block';
+      document.getElementById('clientOrderStatus').textContent = my.status;
+      document.getElementById('clientOrderInfo').innerHTML =
+        `Авто: <strong>${my.brand} ${my.model}</strong> (${my.plate})<br/>Дата и время: <strong>${my.date} в ${my.time}</strong>`;
+    }
+
+    function triggerReminder(mins, target) {
+      showToast(
+        `⏰ Напоминание (${mins} мин) — ${target}`,
+        mins === 40
+          ? 'До замены масла осталось 40 минут. Подготовьтесь к выезду в Garant service.'
+          : 'Осталось 20 минут! Ваш бокс и масло уже готовы.'
+      );
+    }
+
+    function doLogin() {
+      const u = document.getElementById('loginUser').value.trim();
+      const p = document.getElementById('loginPass').value.trim();
+      if (u === 'admin' && p === '1234') {
+        document.getElementById('adminLoginBox').style.display = 'none';
+        document.getElementById('adminPanel').style.display = 'block';
+        renderAdminOrders();
+      } else {
+        showToast('Ошибка входа', 'Неверный логин или пароль');
+      }
+    }
+
+    function logoutAdmin() {
+      document.getElementById('adminLoginBox').style.display = 'block';
+      document.getElementById('adminPanel').style.display = 'none';
+    }
+
+    function completeOrder(id) {
+      orders = orders.map(o => o.id === id ? { ...o, status: 'Готово' } : o);
+      localStorage.setItem('gs_orders', JSON.stringify(orders));
+      renderAdminOrders();
+      showToast('Замена завершена!', 'Клиенту предложено оставить отзыв со звёздами.');
+      switchTab('reviews', document.querySelectorAll('.nav-btn')[1]);
+    }
+
+    function renderAdminOrders() {
+      const list = document.getElementById('ordersList');
+      if (!orders.length) {
+        list.innerHTML = '<p style="font-size:13px; color:var(--text-secondary);">Пока нет новых заявок.</p>';
+        return;
+      }
+      list.innerHTML = orders.map(o => `
+        <div class="order-item">
+          <div style="display:flex; justify-content:space-between; font-weight:700; font-size:14px;">
+            <span>${o.brand} ${o.model} • ${o.plate}</span>
+            <span style="color:var(--gold);">${o.status}</span>
+          </div>
+          <div style="font-size:12px; color:var(--text-secondary); margin:4px 0 8px;">
+            Клиент: ${o.name} (${o.phone})<br/>
+            Время: <strong>${o.date} в ${o.time}</strong>
+          </div>
+          <div class="row-2">
+            <a href="tel:${o.phone}" class="btn-secondary">📞 Позвонить</a>
+            <button class="btn-secondary" onclick="completeOrder(${o.id})">✅ Завершить</button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    let selectedStars = 5;
+    let reviews = JSON.parse(localStorage.getItem('gs_reviews') || '[]');
+
+    function setStars(n) {
+      selectedStars = n;
+      document.querySelectorAll('#starPicker span').forEach((s, i) => {
+        s.style.color = i < n ? '#f59e0b' : 'var(--text-secondary)';
+      });
+    }
+    setStars(5);
+
+    function addReview() {
+      const name = document.getElementById('rName').value.trim() || 'Клиент';
+      const text = document.getElementById('rText').value.trim();
+      if (!text) { showToast('Внимание', 'Напишите текст отзыва'); return; }
+      reviews.unshift({ name, text, stars: selectedStars, date: new Date().toLocaleDateString('ru-RU') });
+      localStorage.setItem('gs_reviews', JSON.stringify(reviews));
+      document.getElementById('rText').value = '';
+      renderReviews();
+      showToast('Спасибо!', 'Ваш отзыв опубликован в Garant service');
+    }
+
+    function renderReviews() {
+      const box = document.getElementById('reviewsList');
+      box.innerHTML = reviews.map(r => `
+        <div class="card">
+          <div style="display:flex; justify-content:space-between;">
+            <strong>${r.name}</strong>
+            <span style="color:#f59e0b;">${'★'.repeat(r.stars)}</span>
+          </div>
+          <p style="font-size:13px; margin-top:6px;">${r.text}</p>
+          <div style="font-size:11px; color:var(--text-secondary); margin-top:6px;">${r.date}</div>
+        </div>
+      `).join('');
+    }
+
+    function sendBugWhatsApp() {
+      const msg = document.getElementById('bugText').value.trim() || 'Здравствуйте! Нужна помощь по приложению Garant service.';
+      const url = `https://wa.me/996556504969?text=${encodeURIComponent(msg)}`;
+      window.open(url, '_blank');
+    }
+
+    renderClientOrder();
+    renderReviews();
+  </script>
+</body>
+</html>
