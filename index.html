@@ -10,7 +10,7 @@
     body.light { background: #f1f5f9; color: #0f172a; }
     svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; pointer-events: none; vertical-align: middle; }
 
-    /* Переключение вкладок на чистом CSS (работает даже без JS) */
+    /* Переключение вкладок на чистом CSS */
     .r-tab { display: none; }
     .section { display: none; padding: 16px; max-width: 520px; margin: 0 auto; }
     #t1:checked ~ #s1, #t2:checked ~ #s2, #t3:checked ~ #s3, #t4:checked ~ #s4 { display: block; }
@@ -45,8 +45,12 @@
     .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 
     .btn { width: 100%; background: #f59e0b; color: #fff; border: none; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 700; margin-top: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; }
-    .btn-sec { width: 100%; background: #1c222e; color: #f8fafc; border: 1px solid rgba(255,255,255,0.12); padding: 12px; border-radius: 12px; font-size: 13px; font-weight: 600; margin-top: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 7px; text-decoration: none; }
+    .btn-sec { width: 100%; background: #1c222e; color: #f8fafc; border: 1px solid rgba(255,255,255,0.12); padding: 11px; border-radius: 12px; font-size: 13px; font-weight: 600; margin-top: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 7px; text-decoration: none; }
     body.light .btn-sec { background: #e2e8f0; color: #0f172a; }
+    .btn-del { width: 100%; background: rgba(239, 68, 68, 0.16); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.35); padding: 11px; border-radius: 12px; font-size: 13px; font-weight: 600; margin-top: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px; }
+
+    .reply-box { background: rgba(245, 158, 11, 0.1); border-left: 3px solid #f59e0b; padding: 10px 12px; border-radius: 8px; margin-top: 10px; font-size: 13px; }
+    .reply-title { color: #f59e0b; font-weight: 700; font-size: 12px; margin-bottom: 3px; }
 
     .toast { position: fixed; top: 14px; left: 16px; right: 16px; background: #141821; border: 2px solid #f59e0b; color: #fff; padding: 14px; border-radius: 14px; z-index: 200; display: none; font-size: 13px; font-weight: 600; }
     .item { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); padding: 12px; border-radius: 12px; margin-top: 10px; font-size: 13px; }
@@ -75,7 +79,7 @@
   <input type="radio" name="tabs" id="t4" class="r-tab" />
 
   <div class="top-tabs">
-    <label for="t1" class="tab-lbl"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.1 2.1 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg><span>Запись</span></label>
+    <label for="t1" class="tab-lbl"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg><span>Запись</span></label>
     <label for="t2" class="tab-lbl"><svg viewBox="0 0 24 24"><polygon points="12 2 15 8 22 9 17 14 18 21 12 18 6 21 7 14 2 9 9 8 12 2"/></svg><span>Отзывы</span></label>
     <label for="t3" class="tab-lbl"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>Вход</span></label>
     <label for="t4" class="tab-lbl"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.2 4.2l2.8 2.8M17 17l2.8 2.8M1 12h4M19 12h4M4.2 19.8l2.8-2.8M17 7l2.8-2.8"/></svg><span>Настройки</span></label>
@@ -138,7 +142,7 @@
     <div id="revList"></div>
   </div>
 
-  <!-- 3. ВХОД -->
+  <!-- 3. ВХОД / ПАНЕЛЬ РАЗРАБОТЧИКА -->
   <div id="s3" class="section">
     <div id="loginBox" class="card">
       <strong>Вход для владельца / разработчика</strong>
@@ -148,13 +152,25 @@
       <input type="password" id="admPass" class="inp" placeholder="Введите пароль" />
       <button type="button" class="btn" onclick="loginAdm()">Войти</button>
     </div>
-    <div id="adminBox" class="card" style="display:none;">
-      <strong>Заявки клиентов</strong>
-      <div class="row2">
-        <button type="button" class="btn-sec" onclick="msg('Напоминание: 40 мин до клиента')">40 мин</button>
-        <button type="button" class="btn-sec" onclick="msg('Напоминание: 20 мин до клиента')">20 мин</button>
+
+    <div id="adminBox" style="display:none;">
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <strong>Заявки клиентов</strong>
+          <button type="button" onclick="logoutAdm()" style="background:none;border:1px solid #94a3b8;color:#94a3b8;padding:4px 10px;border-radius:8px;font-size:12px;">Выйти</button>
+        </div>
+        <div class="row2">
+          <button type="button" class="btn-sec" onclick="msg('Напоминание: 40 мин до клиента')">40 мин</button>
+          <button type="button" class="btn-sec" onclick="msg('Напоминание: 20 мин до клиента')">20 мин</button>
+        </div>
+        <div id="ordList"></div>
       </div>
-      <div id="ordList"></div>
+
+      <!-- МОДЕРАЦИЯ ОТЗЫВОВ В РЕЖИМЕ РАЗРАБОТЧИКА -->
+      <div class="card">
+        <strong>Управление отзывами (ответы и удаление)</strong>
+        <div id="adminRevList"></div>
+      </div>
     </div>
   </div>
 
@@ -192,6 +208,7 @@
       else document.body.classList.remove('light');
       msg('Системная тема');
     }
+
     var orders = JSON.parse(localStorage.getItem('gs_ord') || '[]');
     function sendOrder() {
       var n = document.getElementById('cName').value.trim();
@@ -208,13 +225,20 @@
       document.getElementById('myOrderText').textContent = b + ' ' + m + ' (' + pl + ') — ' + d + ' в ' + tm;
       msg('Вы успешно записаны в Garant service!');
     }
+
     function loginAdm() {
       if (document.getElementById('admUser').value.trim() === 'admin' && document.getElementById('admPass').value.trim() === 'GS9082') {
         document.getElementById('loginBox').style.display = 'none';
         document.getElementById('adminBox').style.display = 'block';
         renderOrd();
+        renderAdminRev();
       } else { msg('Неверный логин или пароль'); }
     }
+    function logoutAdm() {
+      document.getElementById('loginBox').style.display = 'block';
+      document.getElementById('adminBox').style.display = 'none';
+    }
+
     function renderOrd() {
       var box = document.getElementById('ordList');
       box.innerHTML = orders.length ? '' : '<p class="desc" style="margin-top:10px;">Заявок пока нет</p>';
@@ -227,26 +251,82 @@
       orders[i].st = 'Готово'; localStorage.setItem('gs_ord', JSON.stringify(orders));
       renderOrd(); document.getElementById('t2').checked = true; msg('Замена завершена! Оставьте отзыв.');
     }
+
+    /* --- ОТЗЫВЫ И МОДЕРАЦИЯ --- */
     var revs = JSON.parse(localStorage.getItem('gs_rev') || '[]');
+
     function saveRev() {
       var txt = document.getElementById('rText').value.trim();
       if (!txt) { msg('Напишите комментарий'); return; }
-      revs.unshift({ n: document.getElementById('rName').value || 'Клиент', s: document.getElementById('rStars').value, t: txt });
+      revs.unshift({
+        n: document.getElementById('rName').value.trim() || 'Клиент',
+        s: document.getElementById('rStars').value,
+        t: txt,
+        reply: ''
+      });
       localStorage.setItem('gs_rev', JSON.stringify(revs));
-      document.getElementById('rText').value = ''; renderRev(); msg('Спасибо за отзыв!');
+      document.getElementById('rText').value = '';
+      renderRev();
+      renderAdminRev();
+      msg('Спасибо за отзыв!');
     }
+
     function renderRev() {
-      var box = document.getElementById('revList'); box.innerHTML = '';
+      var box = document.getElementById('revList');
+      box.innerHTML = '';
       revs.forEach(function(r) {
-        box.innerHTML += '<div class="card"><b>' + r.n + '</b> <span style="color:#f59e0b;">' + r.s + ' ★</span><p class="desc" style="margin-top:6px;">' + r.t + '</p></div>';
+        var repHtml = r.reply
+          ? '<div class="reply-box"><div class="reply-title">Ответ Garant service:</div>' + r.reply + '</div>'
+          : '';
+        box.innerHTML += '<div class="card"><b>' + r.n + '</b> <span style="color:#f59e0b;">' + r.s + ' ★</span><p class="desc" style="margin-top:6px;">' + r.t + '</p>' + repHtml + '</div>';
       });
     }
+
+    function renderAdminRev() {
+      var box = document.getElementById('adminRevList');
+      if (!box) return;
+      if (!revs.length) {
+        box.innerHTML = '<p class="desc" style="margin-top:10px;">Отзывов пока нет</p>';
+        return;
+      }
+      box.innerHTML = '';
+      revs.forEach(function(r, i) {
+        box.innerHTML +=
+          '<div class="item">' +
+            '<b>' + r.n + '</b> <span style="color:#f59e0b;">' + r.s + ' ★</span>' +
+            '<p class="desc" style="margin:5px 0;">' + r.t + '</p>' +
+            '<input type="text" id="repInp_' + i + '" class="inp" style="padding:9px;font-size:14px;margin-top:6px;" placeholder="Написать ответ клиента..." value="' + (r.reply || '') + '" />' +
+            '<div class="row2">' +
+              '<button type="button" class="btn-sec" onclick="replyRev(' + i + ')">Ответить</button>' +
+              '<button type="button" class="btn-del" onclick="delRev(' + i + ')">Удалить</button>' +
+            '</div>' +
+          '</div>';
+      });
+    }
+
+    function replyRev(i) {
+      var val = document.getElementById('repInp_' + i).value.trim();
+      revs[i].reply = val;
+      localStorage.setItem('gs_rev', JSON.stringify(revs));
+      renderRev();
+      renderAdminRev();
+      msg(val ? 'Ответ на отзыв сохранён!' : 'Ответ очищен');
+    }
+
+    function delRev(i) {
+      revs.splice(i, 1);
+      localStorage.setItem('gs_rev', JSON.stringify(revs));
+      renderRev();
+      renderAdminRev();
+      msg('Отзыв удалён');
+    }
+
     renderRev();
+
     function sendBug() {
       var txt = document.getElementById('bugMsg').value.trim() || 'Ошибка в приложении Garant service';
       window.location.href = 'https://wa.me/996556504969?text=' + encodeURIComponent(txt);
     }
   </script>
 </body>
-  </html>
-  
+</html>
