@@ -9,6 +9,10 @@
     body { background: #0b0d12; color: #f8fafc; min-height: 100vh; padding-bottom: 30px; }
     body.light { background: #f1f5f9; color: #0f172a; }
 
+    /* Важно: SVG и текст внутри кнопок не перехватывают касание */
+    button svg, button span, a svg, a span { pointer-events: none; }
+    button, a { touch-action: manipulation; cursor: pointer; -webkit-user-select: none; user-select: none; }
+
     svg.ico { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; vertical-align: middle; }
 
     .header { background: #141821; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; }
@@ -20,10 +24,10 @@
     .title span { color: #f59e0b; }
     .sub { font-size: 11px; color: #94a3b8; }
 
-    .theme-btn { background: #f59e0b; color: #fff; border: none; padding: 8px 12px; border-radius: 10px; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+    .theme-btn { background: #f59e0b; color: #fff; border: none; padding: 8px 12px; border-radius: 10px; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; }
 
     .top-tabs { background: #141821; padding: 10px 12px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; border-bottom: 1px solid rgba(255,255,255,0.08); }
-    .tab-btn { background: #1c222e; color: #94a3b8; border: 1px solid rgba(255,255,255,0.08); padding: 10px 4px; border-radius: 10px; font-size: 12px; font-weight: 700; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; user-select: none; }
+    .tab-btn { background: #1c222e; color: #94a3b8; border: 1px solid rgba(255,255,255,0.08); padding: 10px 4px; border-radius: 10px; font-size: 12px; font-weight: 700; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; }
     body.light .tab-btn { background: #e2e8f0; color: #475569; border-color: transparent; }
     .tab-btn.active { background: #f59e0b; color: #ffffff; border-color: #f59e0b; }
 
@@ -42,8 +46,8 @@
     body.light .inp { background: #f8fafc; color: #0f172a; border-color: #cbd5e1; }
     .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 
-    .btn { width: 100%; background: #f59e0b; color: #fff; border: none; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 700; margin-top: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; }
-    .btn-sec { width: 100%; background: #1c222e; color: #f8fafc; border: 1px solid rgba(255,255,255,0.12); padding: 12px; border-radius: 12px; font-size: 13px; font-weight: 600; margin-top: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 7px; text-decoration: none; }
+    .btn { width: 100%; background: #f59e0b; color: #fff; border: none; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 700; margin-top: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; }
+    .btn-sec { width: 100%; background: #1c222e; color: #f8fafc; border: 1px solid rgba(255,255,255,0.12); padding: 12px; border-radius: 12px; font-size: 13px; font-weight: 600; margin-top: 8px; display: flex; align-items: center; justify-content: center; gap: 7px; text-decoration: none; }
     body.light .btn-sec { background: #e2e8f0; color: #0f172a; }
 
     .stars-svg { display: inline-flex; gap: 2px; color: #f59e0b; vertical-align: middle; }
@@ -342,7 +346,4 @@
     function saveReview() {
       var txt = document.getElementById('rText').value.trim();
       if (!txt) { alertMsg('Напишите комментарий'); return; }
-      revs.unshift({ n: document.getElementById('rName').value || 'Клиент', s: document.getElementById('rStars').value, t: txt });
-      localStorage.setItem('gs_rev', JSON.stringify(revs));
-      document.getElementById('rText').value = '';
-    
+      revs.unshift({ n: document.getElementById('rName').value || 'Клиент', s: documen
