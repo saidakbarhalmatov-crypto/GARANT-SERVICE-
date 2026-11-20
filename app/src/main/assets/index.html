@@ -464,7 +464,7 @@
           <span class="status-pill">● Бокс открыт</span>
         </div>
         <h1>Профессиональная замена масла без очередей</h1>
-        <p>Многолетний опыт работы, оригинальные масла и фильтры в наличии. Запишитесь на удобное время — мы подготовим всё к вашему приезду и напомним за 40 и 20 минут.</p>
+        <p>Многолетний опыт работы, оригинальные масла и фильтры в наличии. Запишитесь на удобное время — мы подготовим всё к вашему приезду и автоматически напомним за 40 и 20 минут.</p>
         <div class="stats-grid">
           <div>
             <div class="stat-val">20 мин</div>
@@ -486,10 +486,9 @@
           <span class="card-title">Ваша активная запись</span>
           <span class="req-badge" id="clientOrderStatus">Ждём вас</span>
         </div>
-        <div id="clientOrderInfo" style="font-size:13px; line-height:1.5; margin-bottom:12px;"></div>
-        <div class="row-2">
-          <button class="btn-secondary" onclick="triggerReminder(40, 'Клиент')">🔔 Тест 40 мин</button>
-          <button class="btn-secondary" onclick="triggerReminder(20, 'Клиент')">🔥 Тест 20 мин</button>
+        <div id="clientOrderInfo" style="font-size:13px; line-height:1.5;"></div>
+        <div style="font-size:11px; color:var(--text-secondary); margin-top:10px;">
+          🔔 Автоматическое напоминание сработает за 40 и 20 минут до записи.
         </div>
       </div>
 
@@ -597,10 +596,6 @@
             <span class="card-title">Заявки клиентов</span>
             <button class="theme-quick-btn" onclick="logoutAdmin()">Выйти</button>
           </div>
-          <div class="row-2" style="margin-bottom:12px;">
-            <button class="btn-secondary" onclick="triggerReminder(40, 'Владелец')">⏰ Напомнить 40м</button>
-            <button class="btn-secondary" onclick="triggerReminder(20, 'Владелец')">🔥 Напомнить 20м</button>
-          </div>
           <div id="ordersList"></div>
         </div>
       </div>
@@ -666,265 +661,45 @@
     </button>
   </nav>
 
-  <script>
-    let currentThemeMode = localStorage.getItem('gs_theme_mode') || 'system';
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getDatabase, ref, push, set, onValue, update, remove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-    function applyTheme() {
-      let effective = currentThemeMode;
-      if (currentThemeMode === 'system') {
-        effective = mediaQuery.matches ? 'dark' : 'light';
-      }
-      document.documentElement.setAttribute('data-theme', effective);
+    const firebaseConfig = {
+      databaseURL: "https://garant-service-d9715-default-rtdb.europe-west1.firebasedatabase.app"
+    };
 
-      ['dark', 'light', 'system'].forEach(m => {
-        const el = document.getElementById('opt-' + m);
-        if (el) el.classList.toggle('active', currentThemeMode === m);
-      });
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+    const ordersRef = ref(db, 'orders');
+    const reviewsRef = ref(db, 'reviews');
 
-      const labels = { dark: '🌙 Темная', light: '☀️ Светлая', system: '📱 Авто' };
-      document.getElementById('headerThemeBtn').textContent = labels[currentThemeMode];
-    }
+    let orders = [];
+    let reviews = [];
+    let lastKnownStatus = null;
 
-    function setTheme(mode) {
-      currentThemeMode = mode;
-      localStorage.setItem('gs_theme_mode', mode);
-      applyTheme();
-    }
-
-    function cycleTheme() {
-      const order = ['dark', 'light', 'system'];
-      const next = order[(order.indexOf(currentThemeMode) + 1) % order.length];
-      setTheme(next);
-    }
-
-    mediaQuery.addEventListener('change', () => {
-      if (currentThemeMode === 'system') applyTheme();
-    });
-    applyTheme();
-
-    function switchTab(tabId, btn) {
-      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById('tab-' + tabId).classList.add('active');
-      if (btn) btn.classList.add('active');
-    }
-
-    function showToast(title, body) {
-      document.getElementById('toastTitle').textContent = title;
-      document.getElementById('toastBody').textContent = body;
-      const t = document.getElementById('toast');
-      t.classList.add('show');
-      setTimeout(() => t.classList.remove('show'), 4500);
-    }
-
-    let selectedTime = '10:00';
-    const dayChips = document.getElementById('dayChips');
-    const cDate = document.getElementById('cDate');
-
-    for (let i = 0; i < 5; i++) {
-      const d = new Date();
-      d.setDate(d.getDate() + i);
-      const iso = d.toISOString().split('T')[0];
-      const label = i === 0 ? 'Сегодня' : i === 1 ? 'Завтра' : d.toLocaleDateString('ru-RU', { day: 'numeric', month: 'short' });
-      const chip = document.createElement('button');
-      chip.type = 'button';
-      chip.className = 'chip' + (i === 0 ? ' active' : '');
-      chip.textContent = label;
-      chip.onclick = () => {
-        document.querySelectorAll('#dayChips .chip').forEach(c => c.classList.remove('active'));
-        chip.classList.add('active');
-        cDate.value = iso;
-        validateForm();
-      };
-      dayChips.appendChild(chip);
-      if (i === 0) cDate.value = iso;
-    }
-
-    const slots = ['09:00', '10:30', '12:00', '14:00', '15:30', '17:00', '18:30', '20:00'];
-    const timeChips = document.getElementById('timeChips');
-    slots.forEach((slot, idx) => {
-      const b = document.createElement('button');
-      b.type = 'button';
-      b.className = 'chip' + (idx === 0 ? ' active' : '');
-      b.textContent = slot;
-      b.onclick = () => {
-        document.querySelectorAll('#timeChips .chip').forEach(c => c.classList.remove('active'));
-        b.classList.add('active');
-        selectedTime = slot;
-        const [hh, mm] = slot.split(':');
-        document.getElementById('cHour').value = hh;
-        document.getElementById('cMin').value = mm;
-        validateForm();
-      };
-      timeChips.appendChild(b);
-    });
-
-    const cHour = document.getElementById('cHour');
-    const cMin = document.getElementById('cMin');
-    for (let h = 0; h < 24; h++) {
-      const v = String(h).padStart(2, '0');
-      cHour.innerHTML += `<option value="${v}">${v} ч</option>`;
-    }
-    for (let m = 0; m < 60; m += 5) {
-      const v = String(m).padStart(2, '0');
-      cMin.innerHTML += `<option value="${v}">${v} мин</option>`;
-    }
-    cHour.value = '09';
-    cMin.value = '00';
-    selectedTime = '09:00';
-
-    function syncCustomTime() {
-      selectedTime = `${cHour.value}:${cMin.value}`;
-      document.querySelectorAll('#timeChips .chip').forEach(c => c.classList.remove('active'));
-      validateForm();
-    }
-
-    let orders = JSON.parse(localStorage.getItem('gs_orders') || '[]');
-
-    function validateForm() {
-      const ok =
-        document.getElementById('cName').value.trim().length >= 2 &&
-        document.getElementById('cPhone').value.replace(/\D/g, '').length >= 12 &&
-        document.getElementById('cBrand').value.trim().length >= 2 &&
-        document.getElementById('cModel').value.trim().length >= 1 &&
-        document.getElementById('cPlate').value.trim().length >= 4 &&
-        cDate.value && selectedTime;
-      document.getElementById('submitBtn').disabled = !ok;
-    }
-
-    function submitOrder() {
-      const order = {
-        id: Date.now(),
-        name: document.getElementById('cName').value.trim(),
-        phone: document.getElementById('cPhone').value.trim(),
-        brand: document.getElementById('cBrand').value.trim(),
-        model: document.getElementById('cModel').value.trim(),
-        plate: document.getElementById('cPlate').value.trim().toUpperCase(),
-        date: cDate.value,
-        time: selectedTime,
-        status: 'Ожидает'
-      };
-      orders.unshift(order);
-      localStorage.setItem('gs_orders', JSON.stringify(orders));
-      localStorage.setItem('gs_my_order', JSON.stringify(order));
-      renderClientOrder();
-      renderAdminOrders();
-      showToast('Запись подтверждена!', `${order.brand} ${order.model} (${order.plate}) на ${order.date} в ${order.time}`);
-    }
-
-    function renderClientOrder() {
-      const my = JSON.parse(localStorage.getItem('gs_my_order') || 'null');
-      const box = document.getElementById('clientActiveOrder');
-      if (!my) { box.style.display = 'none'; return; }
-      box.style.display = 'block';
-      document.getElementById('clientOrderStatus').textContent = my.status;
-      document.getElementById('clientOrderInfo').innerHTML =
-        `Авто: <strong>${my.brand} ${my.model}</strong> (${my.plate})<br/>Дата и время: <strong>${my.date} в ${my.time}</strong>`;
-    }
-
-    function triggerReminder(mins, target) {
-      showToast(
-        `⏰ Напоминание (${mins} мин) — ${target}`,
-        mins === 40
-          ? 'До замены масла осталось 40 минут. Подготовьтесь к выезду в Garant service.'
-          : 'Осталось 20 минут! Ваш бокс и масло уже готовы.'
-      );
-    }
-
-    function doLogin() {
-      const u = document.getElementById('loginUser').value.trim();
-      const p = document.getElementById('loginPass').value.trim();
-      if (u === 'admin' && p === '1234') {
-        document.getElementById('adminLoginBox').style.display = 'none';
-        document.getElementById('adminPanel').style.display = 'block';
-        renderAdminOrders();
-      } else {
-        showToast('Ошибка входа', 'Неверный логин или пароль');
+    // --- ЗАПРОС РАЗРЕШЕНИЯ НА УВЕДОМЛЕНИЯ ПРИ ВХОДЕ ---
+    async function requestNotificationPermissionOnStart() {
+      if ('Notification' in window && Notification.permission === 'default') {
+        try {
+          await Notification.requestPermission();
+        } catch (e) {
+          // Игнорируем, если среда запрещает вызов без клика
+        }
       }
     }
+    requestNotificationPermissionOnStart();
 
-    function logoutAdmin() {
-      document.getElementById('adminLoginBox').style.display = 'block';
-      document.getElementById('adminPanel').style.display = 'none';
-    }
-
-    function completeOrder(id) {
-      orders = orders.map(o => o.id === id ? { ...o, status: 'Готово' } : o);
-      localStorage.setItem('gs_orders', JSON.stringify(orders));
-      renderAdminOrders();
-      showToast('Замена завершена!', 'Клиенту предложено оставить отзыв со звёздами.');
-      switchTab('reviews', document.querySelectorAll('.nav-btn')[1]);
-    }
-
-    function renderAdminOrders() {
-      const list = document.getElementById('ordersList');
-      if (!orders.length) {
-        list.innerHTML = '<p style="font-size:13px; color:var(--text-secondary);">Пока нет новых заявок.</p>';
-        return;
+    // Повторная попытка при первом касании экрана, если системное окно требовало жеста пользователя
+    document.addEventListener('pointerdown', () => {
+      if ('Notification' in window && Notification.permission === 'default') {
+        Notification.requestPermission().catch(() => {});
       }
-      list.innerHTML = orders.map(o => `
-        <div class="order-item">
-          <div style="display:flex; justify-content:space-between; font-weight:700; font-size:14px;">
-            <span>${o.brand} ${o.model} • ${o.plate}</span>
-            <span style="color:var(--gold);">${o.status}</span>
-          </div>
-          <div style="font-size:12px; color:var(--text-secondary); margin:4px 0 8px;">
-            Клиент: ${o.name} (${o.phone})<br/>
-            Время: <strong>${o.date} в ${o.time}</strong>
-          </div>
-          <div class="row-2">
-            <a href="tel:${o.phone}" class="btn-secondary">📞 Позвонить</a>
-            <button class="btn-secondary" onclick="completeOrder(${o.id})">✅ Завершить</button>
-          </div>
-        </div>
-      `).join('');
-    }
+    }, { once: true });
 
-    let selectedStars = 5;
-    let reviews = JSON.parse(localStorage.getItem('gs_reviews') || '[]');
-
-    function setStars(n) {
-      selectedStars = n;
-      document.querySelectorAll('#starPicker span').forEach((s, i) => {
-        s.style.color = i < n ? '#f59e0b' : 'var(--text-secondary)';
-      });
-    }
-    setStars(5);
-
-    function addReview() {
-      const name = document.getElementById('rName').value.trim() || 'Клиент';
-      const text = document.getElementById('rText').value.trim();
-      if (!text) { showToast('Внимание', 'Напишите текст отзыва'); return; }
-      reviews.unshift({ name, text, stars: selectedStars, date: new Date().toLocaleDateString('ru-RU') });
-      localStorage.setItem('gs_reviews', JSON.stringify(reviews));
-      document.getElementById('rText').value = '';
-      renderReviews();
-      showToast('Спасибо!', 'Ваш отзыв опубликован в Garant service');
-    }
-
-    function renderReviews() {
-      const box = document.getElementById('reviewsList');
-      box.innerHTML = reviews.map(r => `
-        <div class="card">
-          <div style="display:flex; justify-content:space-between;">
-            <strong>${r.name}</strong>
-            <span style="color:#f59e0b;">${'★'.repeat(r.stars)}</span>
-          </div>
-          <p style="font-size:13px; margin-top:6px;">${r.text}</p>
-          <div style="font-size:11px; color:var(--text-secondary); margin-top:6px;">${r.date}</div>
-        </div>
-      `).join('');
-    }
-
-    function sendBugWhatsApp() {
-      const msg = document.getElementById('bugText').value.trim() || 'Здравствуйте! Нужна помощь по приложению Garant service.';
-      const url = `https://wa.me/996556504969?text=${encodeURIComponent(msg)}`;
-      window.open(url, '_blank');
-    }
-
-    renderClientOrder();
-    renderReviews();
-  </script>
-</body>
-</html>
+    function sendAutoNotification(title, body) {
+      window.showToast(title, body);
+      if ('Notification' in window && Notification.permission === 'granted') {
+        try {
+          new Notification(title, { body });
+    
