@@ -2,7 +2,7 @@
 <html lang="ru" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>Garant service — Замена масла №1 в Кызыл-Кия</title>
   <style>
     :root, [data-theme="dark"] {
@@ -10,17 +10,35 @@
       --bg-card: #141821;
       --bg-input: #1c222e;
       --bg-elevated: #232a38;
-      --border: rgba(255, 255, 255, 0.09);
+      --border: rgba(255, 255, 255, 0.1);
       --text-primary: #f8fafc;
       --text-secondary: #94a3b8;
       --gold: #f59e0b;
       --gold-dark: #d97706;
-      --gold-soft: rgba(245, 158, 11, 0.14);
+      --gold-soft: rgba(245, 158, 11, 0.15);
       --btn-text: #ffffff;
       --green: #10b981;
-      --green-soft: rgba(16, 185, 129, 0.14);
+      --green-soft: rgba(16, 185, 129, 0.15);
       --red: #ef4444;
-      --shadow: 0 12px 32px rgba(0, 0, 0, 0.45);
+      --shadow: 0 10px 28px rgba(0, 0, 0, 0.45);
+    }
+
+    [data-theme="yellow"] {
+      --bg-main: #09090b;
+      --bg-card: #121215;
+      --bg-input: #1c1c21;
+      --bg-elevated: #27272a;
+      --border: rgba(250, 204, 21, 0.25);
+      --text-primary: #fafafa;
+      --text-secondary: #a1a1aa;
+      --gold: #facc15;
+      --gold-dark: #eab308;
+      --gold-soft: rgba(250, 204, 21, 0.16);
+      --btn-text: #09090b;
+      --green: #22c55e;
+      --green-soft: rgba(34, 197, 94, 0.15);
+      --red: #ef4444;
+      --shadow: 0 10px 28px rgba(0, 0, 0, 0.65);
     }
 
     [data-theme="light"] {
@@ -28,7 +46,7 @@
       --bg-card: #ffffff;
       --bg-input: #f8fafc;
       --bg-elevated: #e2e8f0;
-      --border: rgba(15, 23, 42, 0.1);
+      --border: rgba(15, 23, 42, 0.12);
       --text-primary: #0f172a;
       --text-secondary: #475569;
       --gold: #d97706;
@@ -41,30 +59,12 @@
       --shadow: 0 8px 24px rgba(15, 23, 42, 0.08);
     }
 
-    [data-theme="yellow"] {
-      --bg-main: #09090b;
-      --bg-card: #121215;
-      --bg-input: #1c1c21;
-      --bg-elevated: #27272a;
-      --border: rgba(250, 204, 21, 0.22);
-      --text-primary: #fafafa;
-      --text-secondary: #a1a1aa;
-      --gold: #facc15;
-      --gold-dark: #eab308;
-      --gold-soft: rgba(250, 204, 21, 0.16);
-      --btn-text: #09090b;
-      --green: #22c55e;
-      --green-soft: rgba(34, 197, 94, 0.15);
-      --red: #ef4444;
-      --shadow: 0 12px 32px rgba(0, 0, 0, 0.65);
-    }
-
     [data-theme="ocean"] {
       --bg-main: #070d19;
       --bg-card: #0f172a;
       --bg-input: #1e293b;
       --bg-elevated: #263449;
-      --border: rgba(56, 189, 248, 0.18);
+      --border: rgba(56, 189, 248, 0.2);
       --text-primary: #f1f5f9;
       --text-secondary: #94a3b8;
       --gold: #38bdf8;
@@ -72,9 +72,9 @@
       --gold-soft: rgba(56, 189, 248, 0.15);
       --btn-text: #070d19;
       --green: #10b981;
-      --green-soft: rgba(16, 185, 129, 0.14);
+      --green-soft: rgba(16, 185, 129, 0.15);
       --red: #f43f5e;
-      --shadow: 0 12px 32px rgba(2, 6, 23, 0.6);
+      --shadow: 0 10px 28px rgba(2, 6, 23, 0.6);
     }
 
     [data-theme="emerald"] {
@@ -82,7 +82,7 @@
       --bg-card: #0c1f18;
       --bg-input: #132e24;
       --bg-elevated: #193d30;
-      --border: rgba(52, 211, 153, 0.18);
+      --border: rgba(52, 211, 153, 0.2);
       --text-primary: #ecfdf5;
       --text-secondary: #a7f3d0;
       --gold: #34d399;
@@ -92,7 +92,7 @@
       --green: #10b981;
       --green-soft: rgba(16, 185, 129, 0.15);
       --red: #ef4444;
-      --shadow: 0 12px 32px rgba(0, 0, 0, 0.55);
+      --shadow: 0 10px 28px rgba(0, 0, 0, 0.55);
     }
 
     * {
@@ -107,7 +107,7 @@
       background: var(--bg-main);
       color: var(--text-primary);
       min-height: 100vh;
-      padding-bottom: 92px;
+      padding-bottom: calc(95px + env(safe-area-inset-bottom));
       transition: background 0.25s ease, color 0.25s ease;
     }
 
@@ -133,8 +133,8 @@
     }
 
     .logo-box {
-      width: 40px;
-      height: 40px;
+      width: 42px;
+      height: 42px;
       border-radius: 12px;
       background: linear-gradient(135deg, var(--gold), var(--gold-dark));
       display: flex;
@@ -149,7 +149,7 @@
     }
 
     .logo-box:active {
-      transform: scale(0.94);
+      transform: scale(0.92);
     }
 
     .brand-info {
@@ -180,18 +180,45 @@
       background: var(--bg-input);
       border: 1px solid var(--border);
       color: var(--text-primary);
-      padding: 7px 11px;
+      padding: 8px 12px;
       border-radius: 10px;
       font-size: 12px;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
       flex-shrink: 0;
+    }
+
+    .top-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      max-width: 520px;
+      margin: 12px auto 0;
+      padding: 0 16px;
+    }
+
+    .top-tab-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      padding: 10px 6px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .top-tab-btn.active {
+      background: var(--gold-soft);
+      border-color: var(--gold);
+      color: var(--gold);
     }
 
     .container {
       max-width: 520px;
       margin: 0 auto;
-      padding: 16px;
+      padding: 14px 16px;
     }
 
     .hero-card {
@@ -201,8 +228,6 @@
       padding: 18px;
       margin-bottom: 16px;
       box-shadow: var(--shadow);
-      position: relative;
-      overflow: hidden;
     }
 
     .hero-top {
@@ -210,6 +235,7 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 10px;
+      gap: 6px;
     }
 
     .city-pill {
@@ -220,7 +246,6 @@
       padding: 5px 10px;
       border-radius: 999px;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
     }
 
     .status-pill {
@@ -281,6 +306,7 @@
       justify-content: space-between;
       align-items: center;
       margin-bottom: 14px;
+      gap: 8px;
     }
 
     .card-title {
@@ -318,7 +344,6 @@
       border-radius: 12px;
       font-size: 14px;
       outline: none;
-      transition: border-color 0.2s;
     }
 
     .input:focus {
@@ -375,13 +400,11 @@
       font-weight: 800;
       cursor: pointer;
       margin-top: 6px;
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
     }
 
     .btn-primary:disabled {
       opacity: 0.45;
       cursor: not-allowed;
-      box-shadow: none;
     }
 
     .btn-secondary {
@@ -415,10 +438,6 @@
       font-weight: 600;
       cursor: pointer;
       text-align: center;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
     }
 
     .theme-option.active {
@@ -436,7 +455,7 @@
       border-top: 1px solid var(--border);
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      padding: 8px 6px 12px;
+      padding: 10px 6px calc(12px + env(safe-area-inset-bottom));
       z-index: 50;
     }
 
@@ -448,8 +467,8 @@
       flex-direction: column;
       align-items: center;
       gap: 4px;
-      font-size: 11px;
-      font-weight: 600;
+      font-size: 12px;
+      font-weight: 700;
       cursor: pointer;
     }
 
@@ -469,7 +488,7 @@
       position: fixed;
       top: 14px;
       left: 50%;
-      transform: translateX(-50%) translateY(-130%);
+      transform: translateX(-50%) translateY(-140%);
       width: calc(100% - 32px);
       max-width: 480px;
       background: var(--bg-card);
@@ -489,7 +508,7 @@
     .star-row {
       display: flex;
       gap: 8px;
-      font-size: 26px;
+      font-size: 28px;
       cursor: pointer;
       margin: 6px 0 12px;
     }
@@ -512,14 +531,20 @@
 
   <header class="header">
     <div class="brand">
-      <div class="logo-box" onclick="handleSecretLogoTap()" title="Garant service">GS</div>
+      <div class="logo-box" id="secretLogo">GS</div>
       <div class="brand-info">
         <div class="brand-title">Garant <span>service</span></div>
         <div class="owner-badge">Владелец: Абдуллажон Халматов</div>
       </div>
     </div>
-    <button class="theme-quick-btn" onclick="cycleTheme()" id="headerThemeBtn">🌓 Тема</button>
+    <button type="button" class="theme-quick-btn" id="headerThemeBtn">🌙 Тёмная</button>
   </header>
+
+  <div class="top-tabs">
+    <button type="button" class="top-tab-btn active" data-tab="client">📝 Запись</button>
+    <button type="button" class="top-tab-btn" data-tab="reviews">⭐ Отзывы</button>
+    <button type="button" class="top-tab-btn" data-tab="settings">⚙️ Настройки</button>
+  </div>
 
   <main class="container">
 
@@ -566,46 +591,46 @@
 
         <div class="form-group">
           <label>Имя и Фамилия *</label>
-          <input type="text" id="cName" class="input" placeholder="Например: Азамат Каримов" oninput="validateForm()" />
+          <input type="text" id="cName" class="input" placeholder="Например: Азамат Каримов" />
         </div>
 
         <div class="form-group">
           <label>Ваш номер телефона *</label>
-          <input type="tel" id="cPhone" class="input" value="+996 " placeholder="+996 XXX XXX XXX" oninput="validateForm()" />
+          <input type="tel" id="cPhone" class="input" value="+996 " placeholder="+996 XXX XXX XXX" />
         </div>
 
         <div class="row-2">
           <div class="form-group">
             <label>Марка авто *</label>
-            <input type="text" id="cBrand" class="input" placeholder="Toyota" oninput="validateForm()" />
+            <input type="text" id="cBrand" class="input" placeholder="Toyota" />
           </div>
           <div class="form-group">
             <label>Модель *</label>
-            <input type="text" id="cModel" class="input" placeholder="Camry 70" oninput="validateForm()" />
+            <input type="text" id="cModel" class="input" placeholder="Camry 70" />
           </div>
         </div>
 
         <div class="form-group">
           <label>Государственный номер *</label>
-          <input type="text" id="cPlate" class="input" placeholder="01 KG 777 AAA" style="text-transform:uppercase;" oninput="validateForm()" />
+          <input type="text" id="cPlate" class="input" placeholder="01 KG 777 AAA" style="text-transform:uppercase;" />
         </div>
 
         <div class="form-group">
           <label>Выберите день визита *</label>
           <div class="chips-scroll" id="dayChips"></div>
-          <input type="date" id="cDate" class="input" style="margin-top:8px;" onchange="validateForm()" />
+          <input type="date" id="cDate" class="input" style="margin-top:8px;" />
         </div>
 
         <div class="form-group">
           <label>Выберите своё время *</label>
           <div class="time-grid" id="timeChips"></div>
           <div class="row-2" style="margin-top:6px;">
-            <select id="cHour" class="input" onchange="syncCustomTime()"></select>
-            <select id="cMin" class="input" onchange="syncCustomTime()"></select>
+            <select id="cHour" class="input"></select>
+            <select id="cMin" class="input"></select>
           </div>
         </div>
 
-        <button id="submitBtn" class="btn-primary" disabled onclick="submitOrder()">Записаться на замену масла</button>
+        <button type="button" id="submitBtn" class="btn-primary" disabled>Записаться на замену масла</button>
       </div>
     </section>
 
@@ -616,11 +641,11 @@
           <span class="req-badge">Отзывы клиентов</span>
         </div>
         <div class="star-row" id="starPicker">
-          <span onclick="setStars(1)">★</span>
-          <span onclick="setStars(2)">★</span>
-          <span onclick="setStars(3)">★</span>
-          <span onclick="setStars(4)">★</span>
-          <span onclick="setStars(5)">★</span>
+          <span data-star="1">★</span>
+          <span data-star="2">★</span>
+          <span data-star="3">★</span>
+          <span data-star="4">★</span>
+          <span data-star="5">★</span>
         </div>
         <div class="form-group">
           <label>Ваше имя</label>
@@ -634,7 +659,7 @@
           <label>Прикрепить фото или видео замены</label>
           <input type="file" id="rMedia" class="input" accept="image/*,video/*" />
         </div>
-        <button class="btn-primary" onclick="addReview()">Опубликовать отзыв</button>
+        <button type="button" id="addReviewBtn" class="btn-primary">Опубликовать отзыв</button>
       </div>
 
       <div id="reviewsList"></div>
@@ -644,7 +669,7 @@
       <div id="adminLoginBox" class="card">
         <div class="card-header">
           <span class="card-title">Скрытый вход для владельца</span>
-          <button class="theme-quick-btn" onclick="closeAdminSection()">✕ Закрыть</button>
+          <button type="button" class="theme-quick-btn" id="closeAdminBtn">✕ Закрыть</button>
         </div>
         <div class="form-group">
           <label>Логин</label>
@@ -654,14 +679,14 @@
           <label>Пароль</label>
           <input type="password" id="loginPass" class="input" placeholder="Введите пароль" />
         </div>
-        <button class="btn-primary" onclick="doLogin()">Войти в режим управления</button>
+        <button type="button" id="loginBtn" class="btn-primary">Войти в режим управления</button>
       </div>
 
       <div id="adminPanel" style="display:none;">
         <div class="card">
           <div class="card-header">
             <span class="card-title">Заявки клиентов (Бокс)</span>
-            <button class="theme-quick-btn" onclick="logoutAdmin()">Выйти</button>
+            <button type="button" class="theme-quick-btn" id="logoutBtn">Выйти</button>
           </div>
           <div id="ordersList"></div>
         </div>
@@ -672,15 +697,15 @@
       <div class="card">
         <div class="card-header">
           <span class="card-title">Оформление приложения</span>
-          <span class="req-badge">6 стилей</span>
+          <span class="req-badge">6 тем</span>
         </div>
         <div class="theme-selector">
-          <button class="theme-option" id="opt-dark" onclick="setTheme('dark')">🌙 Тёмная</button>
-          <button class="theme-option" id="opt-yellow" onclick="setTheme('yellow')">⚡ Жёлто-чёрная</button>
-          <button class="theme-option" id="opt-light" onclick="setTheme('light')">☀️ Светлая</button>
-          <button class="theme-option" id="opt-ocean" onclick="setTheme('ocean')">💎 Синий графит</button>
-          <button class="theme-option" id="opt-emerald" onclick="setTheme('emerald')">🌿 Изумрудная</button>
-          <button class="theme-option" id="opt-system" onclick="setTheme('system')">📱 Системная</button>
+          <button type="button" class="theme-option" data-theme-val="dark">🌙 Тёмная</button>
+          <button type="button" class="theme-option" data-theme-val="yellow">⚡ Жёлто-чёрная</button>
+          <button type="button" class="theme-option" data-theme-val="light">☀️ Светлая</button>
+          <button type="button" class="theme-option" data-theme-val="ocean">💎 Синий графит</button>
+          <button type="button" class="theme-option" data-theme-val="emerald">🌿 Изумрудная</button>
+          <button type="button" class="theme-option" data-theme-val="system">📱 Системная</button>
         </div>
       </div>
 
@@ -699,10 +724,4 @@
 
       <div class="card">
         <div class="card-header">
-          <span class="card-title">Техподдержка приложения</span>
-        </div>
-        <p style="font-size:13px; color:var(--text-secondary); margin-bottom:10px;">
-          Если возник сбой или ошибка в работе приложения, напишите разработчику в WhatsApp: <strong>+996 556 50 49 69</strong>
-        </p>
-        <div class="form-group">
-          <textarea id="bugText" class="input" rows="3" placeholder="О
+            
