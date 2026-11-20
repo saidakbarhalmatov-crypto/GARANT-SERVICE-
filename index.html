@@ -107,8 +107,13 @@
       background: var(--bg-main);
       color: var(--text-primary);
       min-height: 100vh;
-      padding-bottom: calc(92px + env(safe-area-inset-bottom));
+      padding-bottom: calc(95px + env(safe-area-inset-bottom));
       transition: background 0.25s ease, color 0.25s ease;
+    }
+
+    /* Пропускаем нажатия сквозь иконки и текст прямо на саму кнопку */
+    button svg, button span, .logo-box * {
+      pointer-events: none;
     }
 
     .ico {
@@ -151,8 +156,8 @@
     }
 
     .logo-box {
-      width: 42px;
-      height: 42px;
+      width: 44px;
+      height: 44px;
       border-radius: 12px;
       background: linear-gradient(135deg, var(--gold), var(--gold-dark));
       display: flex;
@@ -198,7 +203,7 @@
       background: var(--bg-input);
       border: 1px solid var(--border);
       color: var(--text-primary);
-      padding: 8px 12px;
+      padding: 9px 12px;
       border-radius: 10px;
       font-size: 12px;
       font-weight: 700;
@@ -222,7 +227,7 @@
       background: var(--bg-card);
       border: 1px solid var(--border);
       color: var(--text-secondary);
-      padding: 10px 6px;
+      padding: 11px 6px;
       border-radius: 12px;
       font-size: 12px;
       font-weight: 700;
@@ -478,7 +483,7 @@
       background: var(--bg-input);
       border: 1px solid var(--border);
       color: var(--text-primary);
-      padding: 12px 10px;
+      padding: 13px 10px;
       border-radius: 12px;
       font-size: 13px;
       font-weight: 600;
@@ -505,7 +510,7 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       padding: 10px 6px calc(12px + env(safe-area-inset-bottom));
-      z-index: 50;
+      z-index: 60;
     }
 
     .nav-btn {
@@ -519,25 +524,18 @@
       font-size: 12px;
       font-weight: 700;
       cursor: pointer;
+      padding: 4px 0;
     }
 
     .nav-btn.active {
       color: var(--gold);
     }
 
-    .section {
-      display: none;
-    }
-
-    .section.active {
-      display: block;
-    }
-
     .toast {
       position: fixed;
       top: 14px;
       left: 50%;
-      transform: translateX(-50%) translateY(-150%);
+      transform: translateX(-50%) translateY(-160%);
       width: calc(100% - 32px);
       max-width: 480px;
       background: var(--bg-card);
@@ -562,10 +560,12 @@
     }
 
     .star-item {
-      width: 28px;
-      height: 28px;
+      width: 30px;
+      height: 30px;
       color: var(--gold);
-      transition: transform 0.15s ease;
+      background: none;
+      border: none;
+      cursor: pointer;
     }
 
     .star-item svg {
@@ -594,28 +594,28 @@
 
   <header class="header">
     <div class="brand">
-      <div class="logo-box" id="secretLogo" onclick="window.gsLogoTap()">GS</div>
+      <div class="logo-box" id="secretLogo" onclick="openAdminTap()">GS</div>
       <div class="brand-info">
         <div class="brand-title">Garant <span>service</span></div>
         <div class="owner-badge">Владелец: Абдуллажон Халматов</div>
       </div>
     </div>
-    <button type="button" class="theme-quick-btn" id="headerThemeBtn" onclick="window.gsCycleTheme()">
+    <button type="button" class="theme-quick-btn" id="headerThemeBtn" onclick="nextTheme()">
       <svg class="ico ico-sm" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
       <span id="headerThemeLabel">Тёмная</span>
     </button>
   </header>
 
   <div class="top-tabs">
-    <button type="button" class="top-tab-btn active" data-tab="client" onclick="window.gsTab('client')">
+    <button type="button" class="top-tab-btn active" data-tab="client" onclick="openTab('client')">
       <svg class="ico ico-sm" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
       <span>Запись</span>
     </button>
-    <button type="button" class="top-tab-btn" data-tab="reviews" onclick="window.gsTab('reviews')">
+    <button type="button" class="top-tab-btn" data-tab="reviews" onclick="openTab('reviews')">
       <svg class="ico ico-sm" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
       <span>Отзывы</span>
     </button>
-    <button type="button" class="top-tab-btn" data-tab="settings" onclick="window.gsTab('settings')">
+    <button type="button" class="top-tab-btn" data-tab="settings" onclick="openTab('settings')">
       <svg class="ico ico-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
       <span>Настройки</span>
     </button>
@@ -623,7 +623,7 @@
 
   <main class="container">
 
-    <section id="tab-client" class="section active">
+    <section id="tab-client" class="section" style="display:block;">
       <div class="hero-card">
         <div class="hero-top">
           <span class="city-pill">
@@ -670,54 +670,54 @@
 
         <div class="form-group">
           <label>Имя и Фамилия *</label>
-          <input type="text" id="cName" class="input" placeholder="Например: Азамат Каримов" oninput="window.gsValidate()" />
+          <input type="text" id="cName" class="input" placeholder="Например: Азамат Каримов" oninput="checkForm()" />
         </div>
 
         <div class="form-group">
           <label>Ваш номер телефона *</label>
-          <input type="tel" id="cPhone" class="input" value="+996 " placeholder="+996 XXX XXX XXX" oninput="window.gsValidate()" />
+          <input type="tel" id="cPhone" class="input" value="+996 " placeholder="+996 XXX XXX XXX" oninput="checkForm()" />
         </div>
 
         <div class="row-2">
           <div class="form-group">
             <label>Марка авто *</label>
-            <input type="text" id="cBrand" class="input" placeholder="Toyota" oninput="window.gsValidate()" />
+            <input type="text" id="cBrand" class="input" placeholder="Toyota" oninput="checkForm()" />
           </div>
           <div class="form-group">
             <label>Модель *</label>
-            <input type="text" id="cModel" class="input" placeholder="Camry 70" oninput="window.gsValidate()" />
+            <input type="text" id="cModel" class="input" placeholder="Camry 70" oninput="checkForm()" />
           </div>
         </div>
 
         <div class="form-group">
           <label>Государственный номер *</label>
-          <input type="text" id="cPlate" class="input" placeholder="01 KG 777 AAA" style="text-transform:uppercase;" oninput="window.gsValidate()" />
+          <input type="text" id="cPlate" class="input" placeholder="01 KG 777 AAA" style="text-transform:uppercase;" oninput="checkForm()" />
         </div>
 
         <div class="form-group">
           <label>Выберите день визита *</label>
           <div class="chips-scroll" id="dayChips"></div>
-          <input type="date" id="cDate" class="input" style="margin-top:8px;" onchange="window.gsValidate()" />
+          <input type="date" id="cDate" class="input" style="margin-top:8px;" onchange="checkForm()" />
         </div>
 
         <div class="form-group">
           <label>Выберите своё время *</label>
           <div class="time-grid" id="timeChips"></div>
           <div class="row-2" style="margin-top:6px;">
-            <select id="cHour" class="input" onchange="window.gsSyncTime()"></select>
-            <select id="cMin" class="input" onchange="window.gsSyncTime()"></select>
+            <select id="cHour" class="input" onchange="syncTime()"></select>
+            <select id="cMin" class="input" onchange="syncTime()"></select>
           </div>
         </div>
 
-        <button type="button" id="submitBtn" class="btn-primary" disabled onclick="window.gsSubmitOrder()">Записаться на замену масла</button>
+        <button type="button" id="submitBtn" class="btn-primary" disabled onclick="sendOrder()">Записаться на замену масла</button>
       </div>
     </section>
 
-    <section id="tab-reviews" class="section">
+    <section id="tab-reviews" class="section" style="display:none;">
       <div class="card">
         <div class="card-header">
           <span class="card-title">Оценить Garant service</span>
           <span class="req-badge">Отзывы клиентов</span>
         </div>
         <div class="star-row" id="starPicker">
-          <span class="star-item" onclick="window.gsSetStars(1)"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.
+          <button type="button" class="star-item" onclick="pickStars(1)"><svg viewBox="0 0 24 24"><p
