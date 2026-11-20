@@ -17,7 +17,7 @@ button,input,select,textarea{font:inherit}button{cursor:pointer}
 header{position:sticky;top:0;z-index:5;background:var(--bg);background:color-mix(in srgb,var(--bg) 92%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
 .nav{min-height:72px;display:flex;align-items:center;justify-content:space-between;gap:16px}
 .brand{display:flex;align-items:center;gap:12px;font-weight:850;letter-spacing:.5px}
-.logo{width:44px;height:44px;border:1px solid var(--gold);border-radius:14px;display:grid;place-items:center;color:var(--gold);font-weight:900;user-select:none}
+.logo{width:44px;height:44px;border:1px solid var(--gold);border-radius:14px;display:grid;place-items:center;color:var(--gold);font-weight:900;user-select:none;cursor:pointer}
 .brand small{display:block;color:var(--muted);font-size:11px;letter-spacing:2px}
 .nav-actions{display:flex;align-items:center;gap:8px}
 .btn{border:1px solid var(--line);border-radius:12px;padding:10px 15px;background:var(--panel2);color:var(--text);font-weight:650}
@@ -58,7 +58,7 @@ footer{border-top:1px solid var(--line);padding:25px 0 40px;color:var(--muted);f
 </head>
 <body data-theme="dark">
 <header><div class="wrap nav">
-  <div class="brand"><div class="logo">GS</div><div>GARANT SERVICE<small>АВТОСЕРВИС · ЗАПИСЬ ОНЛАЙН</small></div></div>
+  <div class="brand"><div class="logo" id="logoTap">GS</div><div>GARANT SERVICE<small>АВТОСЕРВИС · ЗАПИСЬ ОНЛАЙН</small></div></div>
   <div class="nav-actions">
     <select id="themeSelect" aria-label="Тема оформления" style="width:auto;padding:9px 10px">
       <option value="dark">Dark</option><option value="yellow">Yellow</option><option value="light">Light</option><option value="ocean">Ocean</option><option value="emerald">Emerald</option><option value="system">System</option>
@@ -116,269 +116,396 @@ footer{border-top:1px solid var(--line);padding:25px 0 40px;color:var(--muted);f
  </div>
 </div>
 <div id="toast" role="status" aria-live="polite"></div>
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js";
-import { getDatabase, ref, push, set, onValue, update, remove, query, orderByChild, equalTo } from "https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBlFc6ZwPTyfMJQ04Q-TMY3mFZke1V1LRY",
-  authDomain: "garant-service-d9715.firebaseapp.com",
-  databaseURL: "https://garant-service-d9715-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "garant-service-d9715",
-  storageBucket: "garant-service-d9715.firebasestorage.app",
-  messagingSenderId: "737969143646",
-  appId: "1:737969143646:web:90e0857ae3bda13d0019cf"
-};
-const app = initializeApp(firebaseConfig);
-const db = getDatabase(app);
-const ADMIN_USERNAME = "admin";
-const ADMIN_PASSWORD = "202";
-const $ = id => document.getElementById(id);
-let selectedStars=0, adminOrdersStop=null, pendingStop=null, systemMedia=null, systemListener=null;
-const toast = message => { const el=$("toast"); el.textContent=message; el.classList.add("show"); window.clearTimeout(toast.timer); toast.timer=window.setTimeout(()=>el.classList.remove("show"),3500); };
-$("year").textContent=new Date().getFullYear();
+<script>
+(function() {
+  var DB_URL = "https://garant-service-d9715-default-rtdb.europe-west1.firebasedatabase.app";
+  var ADMIN_USERNAME = "admin";
+  var ADMIN_PASSWORD = "202";
+  var selectedStars = 0;
+  var adminActive = false;
+  var systemMedia = null;
+  var systemListener = null;
+  var memStorage = {};
+  var logoTaps = 0;
+  var logoTimer = null;
 
-function applyTheme(theme, save=true){
-  const allowed=["dark","yellow","light","ocean","emerald","system"];
-  if(!allowed.includes(theme)) theme="dark";
-  if(save) localStorage.setItem("garant-theme",theme);
-  if(systemListener && systemMedia){systemMedia.removeEventListener?.("change",systemListener);systemListener=null;}
-  const setActual=()=>{
-    const actual=theme==="system" ? (window.matchMedia("(prefers-color-scheme: light)").matches?"light":"dark") : theme;
-    document.body.dataset.theme=actual;
-    document.querySelector('meta[name="theme-color"]').content=actual==="light"?"#f2f3f5":actual==="ocean"?"#09171e":actual==="emerald"?"#0d1914":actual==="yellow"?"#17140c":"#101114";
-  };
-  setActual();
-  if(theme==="system"){
-    systemMedia=window.matchMedia("(prefers-color-scheme: light)");
-    systemListener=()=>setActual();
-    systemMedia.addEventListener?.("change",systemListener);
+  function $(id) { return document.getElementById(id); }
+
+  function getStore(k) {
+    try { return window.localStorage.getItem(k); } catch (e) { return memStorage[k] || null; }
   }
-  $("themeSelect").value=theme;
-}
-const savedTheme=localStorage.getItem("garant-theme")||"dark";
-applyTheme(savedTheme,false);
-$("themeSelect").addEventListener("change",e=>applyTheme(e.target.value));
+  function setStore(k, v) {
+    memStorage[k] = v;
+    try { window.localStorage.setItem(k, v); } catch (e) {}
+  }
 
-const todayLocal=()=>{const d=new Date();d.setMinutes(d.getMinutes()-d.getTimezoneOffset());return d.toISOString().slice(0,10);};
-$("date").min=todayLocal();
+  function toast(message) {
+    var el = $("toast");
+    el.textContent = message;
+    el.classList.add("show");
+    window.clearTimeout(toast.timer);
+    toast.timer = window.setTimeout(function() { el.classList.remove("show"); }, 3500);
+    if (window.AndroidBridge && typeof window.AndroidBridge.notify === "function") {
+      try { window.AndroidBridge.notify("Garant Service", message); } catch (e) {}
+    }
+  }
 
-$("starPicker").addEventListener("click",e=>{
-  const b=e.target.closest("[data-star]"); if(!b)return;
-  selectedStars=Number(b.dataset.star);
-  document.querySelectorAll(".star").forEach(s=>s.classList.toggle("active",Number(s.dataset.star)<=selectedStars));
-});
+  $("year").textContent = new Date().getFullYear();
 
-$("bookingForm").addEventListener("submit",async e=>{
-  e.preventDefault();
-  const button=$("submitOrder");button.disabled=true;button.textContent="Отправляем…";
-  const order={name:$("clientName").value.trim(),phone:$("phone").value.trim(),car:$("car").value.trim(),service:$("service").value,date:$("date").value,time:$("time").value,comment:$("comment").value.trim(),status:"Новая",createdAt:Date.now()};
-  try{
-    if(!order.name||!order.phone||!order.car||!order.service||!order.date||!order.time)throw new Error("Заполните все обязательные поля.");
-    await set(push(ref(db,"orders")),order);
-    $("bookingForm").reset();$("date").min=todayLocal();toast("Заявка отправлена! Мы свяжемся с вами для подтверждения.");
-  }catch(err){console.error(err);toast(err.code==="PERMISSION_DENIED"?"Firebase отклонил запись. Проверьте правила базы данных.":err.message||"Не удалось отправить заявку.");}
-  finally{button.disabled=false;button.textContent="Отправить заявку";}
-});
+  function applyTheme(theme, save) {
+    if (save === undefined) save = true;
+    var allowed = ["dark", "yellow", "light", "ocean", "emerald", "system"];
+    if (allowed.indexOf(theme) === -1) theme = "dark";
+    if (save) setStore("garant-theme", theme);
+    if (systemListener && systemMedia && systemMedia.removeEventListener) {
+      systemMedia.removeEventListener("change", systemListener);
+      systemListener = null;
+    }
+    function setActual() {
+      var isLight = window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches;
+      var actual = theme === "system" ? (isLight ? "light" : "dark") : theme;
+      document.body.setAttribute("data-theme", actual);
+      var meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) {
+        meta.content = actual === "light" ? "#f2f3f5" : actual === "ocean" ? "#09171e" : actual === "emerald" ? "#0d1914" : actual === "yellow" ? "#17140c" : "#101114";
+      }
+    }
+    setActual();
+    if (theme === "system" && window.matchMedia) {
+      systemMedia = window.matchMedia("(prefers-color-scheme: light)");
+      systemListener = function() { setActual(); };
+      if (systemMedia.addEventListener) systemMedia.addEventListener("change", systemListener);
+    }
+    $("themeSelect").value = theme;
+  }
 
-$("reviewForm").addEventListener("submit",async e=>{
-  e.preventDefault();
-  if(!selectedStars){toast("Пожалуйста, выберите оценку.");return;}
-  const button=$("submitReview");button.disabled=true;button.textContent="Отправляем…";
-  try{
-    const review={name:$("reviewName").value.trim(),rating:selectedStars,text:$("reviewText").value.trim(),status:"pending",createdAt:Date.now()};
-    if(!review.name||!review.text)throw new Error("Заполните имя и текст отзыва.");
-    await set(push(ref(db,"reviews")),review);
-    $("reviewForm").reset();selectedStars=0;document.querySelectorAll(".star").forEach(s=>s.classList.remove("active"));toast("Спасибо! Отзыв отправлен на проверку.");
-  }catch(err){console.error(err);toast(err.code==="PERMISSION_DENIED"?"Firebase отклонил отзыв. Проверьте правила базы данных.":err.message||"Не удалось отправить отзыв.");}
-  finally{button.disabled=false;button.textContent="Отправить отзыв";}
-});
-
-function renderReviews(data){
-  const list=$("reviewsList");list.replaceChildren();
-  const entries=Object.entries(data||{}).filter(([,r])=>r&&r.status==="approved").sort((a,b)=>(b[1].createdAt||0)-(a[1].createdAt||0));
-  if(!entries.length){list.innerHTML='<p class="muted">Пока нет опубликованных отзывов.</p>';return;}
-  entries.slice(0,20).forEach(([,r])=>{
-    const item=document.createElement("div");item.className="review";
-    const title=document.createElement("div");const name=document.createElement("strong");name.textContent=r.name||"Клиент";
-    const stars=document.createElement("span");stars.style.color="var(--gold)";stars.textContent="★".repeat(Math.max(0,Math.min(5,Number(r.rating)||0)));
-    title.append(name,stars);const p=document.createElement("p");p.textContent=r.text||"";item.append(title,p);list.append(item);
-  });
-}
-const approvedQuery=query(ref(db,"reviews"),orderByChild("status"),equalTo("approved"));
-onValue(approvedQuery,snap=>renderReviews(snap.val()),err=>{console.error(err);$("reviewsList").textContent="Не удалось загрузить отзывы. Проверьте правила базы.";});
-onValue(ref(db,".info/connected"),snap=>{
-  const connected=snap.val()===true;$("connectionState").textContent=connected?"Firebase подключён":"Нет соединения с Firebase";
-  $("connectionState").style.color=connected?"var(--ok)":"var(--danger)";
-});
-
-$("developerEntry").addEventListener("click",()=>{$("adminModal").classList.add("show");});
-$("closeAdmin").addEventListener("click",()=>$("adminModal").classList.remove("show"));
-$("adminModal").addEventListener("click",e=>{if(e.target===$("adminModal"))$("adminModal").classList.remove("show");});
-$("loginForm").addEventListener("submit",e=>{
-  e.preventDefault();
-  if($("adminUsername").value.trim()===ADMIN_USERNAME && $("adminPassword").value===ADMIN_PASSWORD){
-    $("loginArea").hidden=true;$("adminArea").hidden=false;$("adminUser").textContent="Панель управления";startAdminListeners();
-    $("adminPassword").value="";$("adminUsername").value="";toast("Панель открыта.");
-  }else{toast("Неверный логин или пароль.");$("adminPassword").value="";}
-});
-$("logoutBtn").addEventListener("click",()=>{
-  stopAdminListeners();$("adminArea").hidden=true;$("loginArea").hidden=false;
-  $("ordersList").replaceChildren();$("pendingReviewsList").replaceChildren();toast("Вы вышли из панели.");
-});
-
-function adminCard(id,o){
-  const el=document.createElement("div");el.className="admin-item";
-  const title=document.createElement("strong");title.textContent=`${o.name||"Без имени"} · ${o.car||"Авто не указано"}`;
-  const details=document.createElement("p");details.textContent=`${o.phone||""} | ${o.service||""} | ${o.date||""} ${o.time||""}`;
-  const status=document.createElement("p");status.className="status";status.textContent=`Статус: ${o.status||"Новая"}`;
-  const comment=document.createElement("p");comment.className="muted";comment.textContent=o.comment||"";
-  el.append(title,details,status,comment);
-  ["Новая","Подтверждена","Выполнено","Отменена"].forEach(st=>{
-    const b=document.createElement("button");b.className="btn";b.textContent=st;b.addEventListener("click",async()=>{
-      try{await update(ref(db,`orders/${id}`),{status:st,updatedAt:Date.now()});toast("Статус заявки обновлён.");}
-      catch(err){console.error(err);toast("Не удалось изменить статус. Проверьте правила базы.");}
-    });el.append(b);
-  });
-  const del=document.createElement("button");del.className="btn";del.textContent="Удалить";del.addEventListener("click",async()=>{
-    if(!confirm("Удалить эту заявку?"))return;
-    try{await remove(ref(db,`orders/${id}`));toast("Заявка удалена.");}catch(err){console.error(err);toast("Не удалось удалить заявку.");}
-  });el.append(del);return el;
-}
-function pendingCard(id,r){
-  const el=document.createElement("div");el.className="admin-item";
-  const title=document.createElement(""text");
-  title.className="admin-title";
-  title.textContent=order.name || "Новый заказ";
-
-  const info=document.createElement("div");
-  info.className="admin-info";
-  info.textContent=
-    "Телефон: "+(order.phone || "—")+
-    " | Услуга: "+(order.service || "—")+
-    " | Дата: "+(order.date || "—");
-
-  const status=document.createElement("select");
-  ["Новая","В обработке","Завершена","Отменена"].forEach(value=>{
-    const option=document.createElement("option");
-    option.value=value;
-    option.textContent=value;
-    status.appendChild(option);
-  });
-  status.value=order.status || "Новая";
-  status.addEventListener("change",()=>{
-    update(ref(db,"orders/"+id),{status:status.value});
+  var savedTheme = getStore("garant-theme") || "dark";
+  applyTheme(savedTheme, false);
+  $("themeSelect").addEventListener("change", function(e) {
+    applyTheme(e.target.value, true);
   });
 
-  const remove=document.createElement("button");
-  remove.textContent="Удалить";
-  remove.className="delete-btn";
-  remove.addEventListener("click",()=>{
-    if(confirm("Удалить этот заказ?")){
-      removeData(ref(db,"orders/"+id));
+  function todayLocal() {
+    var d = new Date();
+    d.setMinutes(d.getMinutes() - d.getTimezoneOffset());
+    return d.toISOString().slice(0, 10);
+  }
+  $("date").min = todayLocal();
+
+  $("starPicker").addEventListener("click", function(e) {
+    var b = e.target.closest("[data-star]");
+    if (!b) return;
+    selectedStars = Number(b.getAttribute("data-star"));
+    var stars = document.querySelectorAll(".star");
+    for (var i = 0; i < stars.length; i++) {
+      stars[i].classList.toggle("active", Number(stars[i].getAttribute("data-star")) <= selectedStars);
     }
   });
 
-  el.append(title,info,status,remove);
-  ordersList.appendChild(el);
-}
+  function dbRequest(path, method, bodyObj) {
+    var opts = { method: method || "GET" };
+    if (bodyObj !== undefined) {
+      opts.headers = { "Content-Type": "application/json" };
+      opts.body = JSON.stringify(bodyObj);
+    }
+    return fetch(DB_URL + path + ".json", opts).then(function(res) {
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      return res.json();
+    });
+  }
 
-function showReview(id,review){
-  const el=document.createElement("div");
-  el.className="admin-item";
-
-  const title=document.createElement("div");
-  title.className="admin-title";
-  title.textContent=review.name || "Без имени";
-
-  const message=document.createElement("p");
-  message.textContent=review.text || "";
-
-  const stars=document.createElement("div");
-  stars.textContent="★".repeat(Number(review.rating)||0);
-
-  const approve=document.createElement("button");
-  approve.textContent="Одобрить";
-  approve.className="approve-btn";
-  approve.addEventListener("click",()=>{
-    update(ref(db,"reviews/"+id),{status:"approved"});
+  $("bookingForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    var button = $("submitOrder");
+    button.disabled = true;
+    button.textContent = "Отправляем…";
+    var order = {
+      name: $("clientName").value.trim(),
+      phone: $("phone").value.trim(),
+      car: $("car").value.trim(),
+      service: $("service").value,
+      date: $("date").value,
+      time: $("time").value,
+      comment: $("comment").value.trim(),
+      status: "Новая",
+      createdAt: Date.now()
+    };
+    if (!order.name || !order.phone || !order.car || !order.service || !order.date || !order.time) {
+      toast("Заполните все обязательные поля.");
+      button.disabled = false;
+      button.textContent = "Отправить заявку";
+      return;
+    }
+    dbRequest("/orders", "POST", order)
+      .then(function() {
+        $("bookingForm").reset();
+        $("date").min = todayLocal();
+        toast("Заявка отправлена! Мы свяжемся с вами для подтверждения.");
+        syncAllData();
+      })
+      .catch(function() {
+        toast("Firebase отклонил запись или нет сети. Проверьте правила базы данных.");
+      })
+      .finally(function() {
+        button.disabled = false;
+        button.textContent = "Отправить заявку";
+      });
   });
 
-  const reject=document.createElement("button");
-  reject.textContent="Отклонить";
-  reject.className="delete-btn";
-  reject.addEventListener("click",()=>{
-    update(ref(db,"reviews/"+id),{status:"rejected"});
+  $("reviewForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    if (!selectedStars) {
+      toast("Пожалуйста, выберите оценку.");
+      return;
+    }
+    var button = $("submitReview");
+    button.disabled = true;
+    button.textContent = "Отправляем…";
+    var review = {
+      name: $("reviewName").value.trim(),
+      rating: selectedStars,
+      text: $("reviewText").value.trim(),
+      status: "pending",
+      createdAt: Date.now()
+    };
+    if (!review.name || !review.text) {
+      toast("Заполните имя и текст отзыва.");
+      button.disabled = false;
+      button.textContent = "Отправить отзыв";
+      return;
+    }
+    dbRequest("/reviews", "POST", review)
+      .then(function() {
+        $("reviewForm").reset();
+        selectedStars = 0;
+        var stars = document.querySelectorAll(".star");
+        for (var i = 0; i < stars.length; i++) stars[i].classList.remove("active");
+        toast("Спасибо! Отзыв отправлен на проверку.");
+        syncAllData();
+      })
+      .catch(function() {
+        toast("Firebase отклонил отзыв или нет сети. Проверьте правила базы данных.");
+      })
+      .finally(function() {
+        button.disabled = false;
+        button.textContent = "Отправить отзыв";
+      });
   });
 
-  const remove=document.createElement("button");
-  remove.textContent="Удалить";
-  remove.className="delete-btn";
-  remove.addEventListener("click",()=>{
-    if(confirm("Удалить отзыв?")){
-      removeData(ref(db,"reviews/"+id));
+  function renderReviews(data) {
+    var list = $("reviewsList");
+    list.replaceChildren();
+    var entries = Object.entries(data || {}).filter(function(pair) {
+      return pair[1] && pair[1].status === "approved";
+    }).sort(function(a, b) {
+      return (b[1].createdAt || 0) - (a[1].createdAt || 0);
+    });
+    if (!entries.length) {
+      list.innerHTML = '<p class="muted">Пока нет опубликованных отзывов.</p>';
+      return;
+    }
+    entries.slice(0, 20).forEach(function(pair) {
+      var r = pair[1];
+      var item = document.createElement("div");
+      item.className = "review";
+      var title = document.createElement("div");
+      var name = document.createElement("strong");
+      name.textContent = r.name || "Клиент";
+      var stars = document.createElement("span");
+      stars.style.color = "var(--gold)";
+      var count = Math.max(0, Math.min(5, Number(r.rating) || 0));
+      stars.textContent = new Array(count + 1).join("★");
+      title.append(name, stars);
+      var p = document.createElement("p");
+      p.textContent = r.text || "";
+      item.append(title, p);
+      list.append(item);
+    });
+  }
+
+  function openDevModal() {
+    $("adminModal").classList.add("show");
+  }
+
+  $("developerEntry").addEventListener("click", openDevModal);
+  $("logoTap").addEventListener("click", function() {
+    logoTaps++;
+    clearTimeout(logoTimer);
+    logoTimer = setTimeout(function() { logoTaps = 0; }, 2500);
+    if (logoTaps >= 5) {
+      logoTaps = 0;
+      openDevModal();
     }
   });
 
-  el.append(title,message,stars,approve,reject,remove);
-  reviewsList.appendChild(el);
-}
+  $("closeAdmin").addEventListener("click", function() {
+    $("adminModal").classList.remove("show");
+  });
+  $("adminModal").addEventListener("click", function(e) {
+    if (e.target === $("adminModal")) $("adminModal").classList.remove("show");
+  });
 
-async function loadAdminData(){
-  ordersList.innerHTML="";
-  reviewsList.innerHTML="";
+  $("loginForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+    if ($("adminUsername").value.trim() === ADMIN_USERNAME && $("adminPassword").value === ADMIN_PASSWORD) {
+      adminActive = true;
+      $("loginArea").hidden = true;
+      $("adminArea").hidden = false;
+      $("adminUser").textContent = "Панель управления";
+      $("adminPassword").value = "";
+      $("adminUsername").value = "";
+      syncAllData();
+      toast("Панель открыта.");
+    } else {
+      toast("Неверный логин или пароль.");
+      $("adminPassword").value = "";
+    }
+  });
 
-  const ordersSnap=await get(ref(db,"orders"));
-  if(ordersSnap.exists()){
-    const orders=ordersSnap.val();
-    Object.entries(orders).forEach(([id,order])=>{
-      showOrder(id,order);
+  $("logoutBtn").addEventListener("click", function() {
+    adminActive = false;
+    $("adminArea").hidden = true;
+    $("loginArea").hidden = false;
+    $("ordersList").replaceChildren();
+    $("pendingReviewsList").replaceChildren();
+    toast("Вы вышли из панели.");
+  });
+
+  function adminCard(id, o) {
+    var el = document.createElement("div");
+    el.className = "admin-item";
+    var title = document.createElement("strong");
+    title.textContent = (o.name || "Без имени") + " · " + (o.car || "Авто не указано");
+    var details = document.createElement("p");
+    details.textContent = (o.phone || "") + " | " + (o.service || "") + " | " + (o.date || "") + " " + (o.time || "");
+    var status = document.createElement("p");
+    status.className = "status";
+    status.textContent = "Статус: " + (o.status || "Новая");
+    var comment = document.createElement("p");
+    comment.className = "muted";
+    comment.textContent = o.comment || "";
+    el.append(title, details, status, comment);
+
+    ["Новая", "Подтверждена", "Выполнено", "Отменена"].forEach(function(st) {
+      var b = document.createElement("button");
+      b.className = "btn";
+      b.type = "button";
+      b.textContent = st;
+      b.addEventListener("click", function() {
+        dbRequest("/orders/" + id, "PATCH", { status: st, updatedAt: Date.now() })
+          .then(function() { toast("Статус заявки обновлён."); syncAllData(); })
+          .catch(function() { toast("Не удалось изменить статус."); });
+      });
+      el.append(b);
     });
-  }else{
-    ordersList.textContent="Заказов пока нет.";
-  }
 
-  const reviewsSnap=await get(ref(db,"reviews"));
-  if(reviewsSnap.exists()){
-    const reviews=reviewsSnap.val();
-    Object.entries(reviews)
-      .filter(([id,review])=>review.status!=="approved")
-      .forEach(([id,review])=>showReview(id,review));
-  }else{
-    reviewsList.textContent="Отзывов пока нет.";
-  }
-}
-
-adminLoginForm.addEventListener("submit",event=>{
-  event.preventDefault();
-
-  const username=adminUsername.value.trim();
-  const password=adminPassword.value;
-
-  if(username==="admin" && password==="202"){
-    adminLoginModal.hidden=true;
-    adminPanel.hidden=false;
-    loadAdminData().catch(error=>{
-      console.error(error);
-      toast("Не удалось загрузить данные");
+    var del = document.createElement("button");
+    del.className = "btn";
+    del.type = "button";
+    del.textContent = "Удалить";
+    del.addEventListener("click", function() {
+      dbRequest("/orders/" + id, "DELETE")
+        .then(function() { toast("Заявка удалена."); syncAllData(); })
+        .catch(function() { toast("Не удалось удалить заявку."); });
     });
-  }else{
-    toast("Неверный логин или пароль");
+    el.append(del);
+    return el;
   }
-});
 
-adminLogout.addEventListener("click",()=>{
-  adminPanel.hidden=true;
-  adminLoginModal.hidden=true;
-  adminLoginForm.reset();
-});
+  function pendingCard(id, r) {
+    var el = document.createElement("div");
+    el.className = "admin-item";
+    var title = document.createElement("strong");
+    var count = Math.max(0, Math.min(5, Number(r.rating) || 0));
+    title.textContent = (r.name || "Клиент") + " · " + new Array(count + 1).join("★");
+    var p = document.createElement("p");
+    p.textContent = r.text || "";
+    el.append(title, p);
 
-adminClose.addEventListener("click",()=>{
-  adminLoginModal.hidden=true;
-});
+    var approve = document.createElement("button");
+    approve.className = "btn";
+    approve.type = "button";
+    approve.textContent = "Одобрить";
+    approve.addEventListener("click", function() {
+      dbRequest("/reviews/" + id, "PATCH", { status: "approved", moderatedAt: Date.now() })
+        .then(function() { toast("Отзыв опубликован."); syncAllData(); })
+        .catch(function() { toast("Не удалось одобрить отзыв."); });
+    });
 
-adminPanelClose.addEventListener("click",()=>{
-  adminPanel.hidden=true;
-});
+    var reject = document.createElement("button");
+    reject.className = "btn";
+    reject.type = "button";
+    reject.textContent = "Отклонить";
+    reject.addEventListener("click", function() {
+      dbRequest("/reviews/" + id, "PATCH", { status: "rejected", moderatedAt: Date.now() })
+        .then(function() { toast("Отзыв отклонён."); syncAllData(); })
+        .catch(function() { toast("Не удалось отклонить отзыв."); });
+    });
 
-});
+    var del = document.createElement("button");
+    del.className = "btn";
+    del.type = "button";
+    del.textContent = "Удалить";
+    del.addEventListener("click", function() {
+      dbRequest("/reviews/" + id, "DELETE")
+        .then(function() { toast("Отзыв удалён."); syncAllData(); })
+        .catch(function() { toast("Не удалось удалить отзыв."); });
+    });
+
+    el.append(approve, reject, del);
+    return el;
+  }
+
+  function syncAllData() {
+    dbRequest("/reviews", "GET")
+      .then(function(data) {
+        $("connectionState").textContent = "Firebase подключён";
+        $("connectionState").style.color = "var(--ok)";
+        renderReviews(data);
+        if (adminActive) {
+          var pList = $("pendingReviewsList");
+          pList.replaceChildren();
+          var pending = Object.entries(data || {}).filter(function(pair) {
+            return pair[1] && pair[1].status === "pending";
+          }).sort(function(a, b) {
+            return (b[1].createdAt || 0) - (a[1].createdAt || 0);
+          });
+          if (!pending.length) {
+            pList.textContent = "Отзывов на проверке нет.";
+          } else {
+            pending.forEach(function(pair) { pList.append(pendingCard(pair[0], pair[1])); });
+          }
+        }
+      })
+      .catch(function() {
+        $("connectionState").textContent = "Нет соединения с Firebase";
+        $("connectionState").style.color = "var(--danger)";
+      });
+
+    if (adminActive) {
+      dbRequest("/orders", "GET")
+        .then(function(data) {
+          var oList = $("ordersList");
+          oList.replaceChildren();
+          var entries = Object.entries(data || {}).sort(function(a, b) {
+            return (b[1].createdAt || 0) - (a[1].createdAt || 0);
+          });
+          if (!entries.length) {
+            oList.textContent = "Заявок пока нет.";
+          } else {
+            entries.forEach(function(pair) { oList.append(adminCard(pair[0], pair[1])); });
+          }
+        })
+        .catch(function() {
+          $("ordersList").textContent = "Ошибка загрузки заявок. Проверьте правила Firebase.";
+        });
+    }
+  }
+
+  syncAllData();
+  window.setInterval(syncAllData, 5000);
+})();
+</script>
+</body>
+</html>
