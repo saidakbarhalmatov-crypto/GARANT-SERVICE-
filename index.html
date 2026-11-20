@@ -3,40 +3,38 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Garant service — Замена масла №1 в Кызыл-Кия</title>
+  <title>Garant service — Кызыл-Кия</title>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
     body { background: #0b0d12; color: #f8fafc; min-height: 100vh; padding-bottom: 30px; }
     body.light { background: #f1f5f9; color: #0f172a; }
+    svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; pointer-events: none; vertical-align: middle; }
 
-    /* Важно: SVG и текст внутри кнопок не перехватывают касание */
-    button svg, button span, a svg, a span { pointer-events: none; }
-    button, a { touch-action: manipulation; cursor: pointer; -webkit-user-select: none; user-select: none; }
-
-    svg.ico { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; vertical-align: middle; }
+    /* Переключение вкладок на чистом CSS (работает даже без JS) */
+    .r-tab { display: none; }
+    .section { display: none; padding: 16px; max-width: 520px; margin: 0 auto; }
+    #t1:checked ~ #s1, #t2:checked ~ #s2, #t3:checked ~ #s3, #t4:checked ~ #s4 { display: block; }
+    #t1:checked ~ .top-tabs label[for="t1"],
+    #t2:checked ~ .top-tabs label[for="t2"],
+    #t3:checked ~ .top-tabs label[for="t3"],
+    #t4:checked ~ .top-tabs label[for="t4"] { background: #f59e0b; color: #fff; border-color: #f59e0b; }
 
     .header { background: #141821; border-bottom: 1px solid rgba(255,255,255,0.1); padding: 12px 16px; display: flex; align-items: center; justify-content: space-between; }
-    body.light .header, body.light .card, body.light .top-tabs { background: #ffffff; color: #0f172a; border-color: rgba(0,0,0,0.1); }
+    body.light .header, body.light .card, body.light .top-tabs { background: #fff; color: #0f172a; border-color: rgba(0,0,0,0.1); }
     .brand { display: flex; align-items: center; gap: 10px; }
-    .logo { width: 38px; height: 38px; border-radius: 10px; background: linear-gradient(135deg, #f59e0b, #d97706); color: #fff; display: flex; align-items: center; justify-content: center; }
-    .logo svg { width: 22px; height: 22px; stroke: #fff; fill: none; stroke-width: 2.2; }
+    .logo { width: 38px; height: 38px; border-radius: 10px; background: #f59e0b; color: #fff; display: flex; align-items: center; justify-content: center; }
+    .logo svg { width: 22px; height: 22px; stroke: #fff; }
     .title { font-size: 17px; font-weight: 800; }
     .title span { color: #f59e0b; }
     .sub { font-size: 11px; color: #94a3b8; }
 
-    .theme-btn { background: #f59e0b; color: #fff; border: none; padding: 8px 12px; border-radius: 10px; font-size: 12px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px; }
-
     .top-tabs { background: #141821; padding: 10px 12px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; border-bottom: 1px solid rgba(255,255,255,0.08); }
-    .tab-btn { background: #1c222e; color: #94a3b8; border: 1px solid rgba(255,255,255,0.08); padding: 10px 4px; border-radius: 10px; font-size: 12px; font-weight: 700; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; }
-    body.light .tab-btn { background: #e2e8f0; color: #475569; border-color: transparent; }
-    .tab-btn.active { background: #f59e0b; color: #ffffff; border-color: #f59e0b; }
-
-    .section { display: none; padding: 16px; max-width: 520px; margin: 0 auto; }
-    .section.active { display: block; }
+    .tab-lbl { background: #1c222e; color: #94a3b8; border: 1px solid rgba(255,255,255,0.08); padding: 10px 4px; border-radius: 10px; font-size: 12px; font-weight: 700; display: flex; flex-direction: column; align-items: center; gap: 4px; cursor: pointer; user-select: none; }
+    body.light .tab-lbl { background: #e2e8f0; color: #475569; border-color: transparent; }
 
     .card { background: #141821; border: 1px solid rgba(255,255,255,0.09); border-radius: 18px; padding: 16px; margin-bottom: 14px; }
     .hero { background: linear-gradient(145deg, #141821, #1e2533); }
-    body.light .hero { background: linear-gradient(145deg, #ffffff, #e2e8f0); }
+    body.light .hero { background: linear-gradient(145deg, #fff, #e2e8f0); }
     .pill { display: inline-flex; align-items: center; gap: 5px; background: rgba(245,158,11,0.15); color: #f59e0b; font-size: 11px; font-weight: 700; padding: 5px 10px; border-radius: 99px; margin-bottom: 8px; }
     h1 { font-size: 19px; margin-bottom: 6px; }
     p.desc { font-size: 13px; color: #94a3b8; line-height: 1.4; }
@@ -46,14 +44,11 @@
     body.light .inp { background: #f8fafc; color: #0f172a; border-color: #cbd5e1; }
     .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 
-    .btn { width: 100%; background: #f59e0b; color: #fff; border: none; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 700; margin-top: 14px; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; }
-    .btn-sec { width: 100%; background: #1c222e; color: #f8fafc; border: 1px solid rgba(255,255,255,0.12); padding: 12px; border-radius: 12px; font-size: 13px; font-weight: 600; margin-top: 8px; display: flex; align-items: center; justify-content: center; gap: 7px; text-decoration: none; }
+    .btn { width: 100%; background: #f59e0b; color: #fff; border: none; padding: 14px; border-radius: 12px; font-size: 15px; font-weight: 700; margin-top: 14px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; }
+    .btn-sec { width: 100%; background: #1c222e; color: #f8fafc; border: 1px solid rgba(255,255,255,0.12); padding: 12px; border-radius: 12px; font-size: 13px; font-weight: 600; margin-top: 8px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 7px; text-decoration: none; }
     body.light .btn-sec { background: #e2e8f0; color: #0f172a; }
 
-    .stars-svg { display: inline-flex; gap: 2px; color: #f59e0b; vertical-align: middle; }
-    .stars-svg svg { width: 14px; height: 14px; fill: #f59e0b; stroke: #f59e0b; }
-
-    .toast { position: fixed; top: 14px; left: 16px; right: 16px; background: #141821; border: 2px solid #f59e0b; color: #fff; padding: 14px; border-radius: 14px; z-index: 200; display: none; font-size: 13px; font-weight: 600; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+    .toast { position: fixed; top: 14px; left: 16px; right: 16px; background: #141821; border: 2px solid #f59e0b; color: #fff; padding: 14px; border-radius: 14px; z-index: 200; display: none; font-size: 13px; font-weight: 600; }
     .item { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08); padding: 12px; border-radius: 12px; margin-top: 10px; font-size: 13px; }
   </style>
 </head>
@@ -62,46 +57,34 @@
 
   <header class="header">
     <div class="brand">
-      <div class="logo">
-        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M12 8c-2 2.5-3 4-3 5.5a3 3 0 0 0 6 0c0-1.5-1-3-3-5.5z"/></svg>
-      </div>
+      <div class="logo"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
       <div>
         <div class="title">Garant <span>service</span></div>
         <div class="sub">Владелец: Абдуллажон Халматов</div>
       </div>
     </div>
-    <button type="button" class="theme-btn" onclick="toggleTheme()">
-      <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+    <button type="button" onclick="document.body.classList.toggle('light')" style="background:#f59e0b;color:#fff;border:none;padding:8px 12px;border-radius:10px;font-size:12px;font-weight:700;display:flex;align-items:center;gap:5px;">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2"/></svg>
       <span>Тема</span>
     </button>
   </header>
 
+  <input type="radio" name="tabs" id="t1" class="r-tab" checked />
+  <input type="radio" name="tabs" id="t2" class="r-tab" />
+  <input type="radio" name="tabs" id="t3" class="r-tab" />
+  <input type="radio" name="tabs" id="t4" class="r-tab" />
+
   <div class="top-tabs">
-    <button type="button" class="tab-btn active" id="btn-client" onclick="openTab('client')">
-      <svg class="ico" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
-      <span>Запись</span>
-    </button>
-    <button type="button" class="tab-btn" id="btn-reviews" onclick="openTab('reviews')">
-      <svg class="ico" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-      <span>Отзывы</span>
-    </button>
-    <button type="button" class="tab-btn" id="btn-admin" onclick="openTab('admin')">
-      <svg class="ico" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-      <span>Вход</span>
-    </button>
-    <button type="button" class="tab-btn" id="btn-settings" onclick="openTab('settings')">
-      <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-      <span>Настройки</span>
-    </button>
+    <label for="t1" class="tab-lbl"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.1 2.1 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg><span>Запись</span></label>
+    <label for="t2" class="tab-lbl"><svg viewBox="0 0 24 24"><polygon points="12 2 15 8 22 9 17 14 18 21 12 18 6 21 7 14 2 9 9 8 12 2"/></svg><span>Отзывы</span></label>
+    <label for="t3" class="tab-lbl"><svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg><span>Вход</span></label>
+    <label for="t4" class="tab-lbl"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v4M12 19v4M4.2 4.2l2.8 2.8M17 17l2.8 2.8M1 12h4M19 12h4M4.2 19.8l2.8-2.8M17 7l2.8-2.8"/></svg><span>Настройки</span></label>
   </div>
 
   <!-- 1. ЗАПИСЬ -->
-  <div id="tab-client" class="section active">
+  <div id="s1" class="section">
     <div class="card hero">
-      <span class="pill">
-        <svg class="ico" style="width:13px;height:13px;" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        <span>Сервис №1 в г. Кызыл-Кия</span>
-      </span>
+      <span class="pill"><svg viewBox="0 0 24 24"><polygon points="12 2 15 8 22 9 17 14 18 21 12 18 6 21 7 14 2 9 9 8 12 2"/></svg><span>Сервис №1 в г. Кызыл-Кия</span></span>
       <h1>Замена масла без очередей</h1>
       <p class="desc">Многолетний опыт работы и оригинальные масла. Напомним вам за 40 и 20 минут до визита.</p>
     </div>
@@ -110,14 +93,8 @@
       <strong style="color:#f59e0b;">Ваша активная запись:</strong>
       <div id="myOrderText" style="font-size:13px; margin:6px 0;"></div>
       <div class="row2">
-        <button type="button" class="btn-sec" onclick="alertMsg('Напоминание за 40 минут до замены масла!')">
-          <svg class="ico" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-          <span>Тест 40 мин</span>
-        </button>
-        <button type="button" class="btn-sec" onclick="alertMsg('Осталось 20 минут! Ваш бокс готов.')">
-          <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          <span>Тест 20 мин</span>
-        </button>
+        <button type="button" class="btn-sec" onclick="msg('Напоминание за 40 минут до замены масла!')">Тест 40 мин</button>
+        <button type="button" class="btn-sec" onclick="msg('Осталось 20 минут! Ваш бокс готов.')">Тест 20 мин</button>
       </div>
     </div>
 
@@ -125,170 +102,96 @@
       <strong>Анкета клиента (все поля обязательны)</strong>
       <label class="lbl">Имя и Фамилия *</label>
       <input type="text" id="cName" class="inp" placeholder="Азамат Каримов" />
-
       <label class="lbl">Телефон *</label>
       <input type="tel" id="cPhone" class="inp" value="+996 " />
-
       <div class="row2">
-        <div>
-          <label class="lbl">Марка авто *</label>
-          <input type="text" id="cBrand" class="inp" placeholder="Toyota" />
-        </div>
-        <div>
-          <label class="lbl">Модель *</label>
-          <input type="text" id="cModel" class="inp" placeholder="Camry 70" />
-        </div>
+        <div><label class="lbl">Марка авто *</label><input type="text" id="cBrand" class="inp" placeholder="Toyota" /></div>
+        <div><label class="lbl">Модель *</label><input type="text" id="cModel" class="inp" placeholder="Camry 70" /></div>
       </div>
-
       <label class="lbl">Государственный номер *</label>
       <input type="text" id="cPlate" class="inp" placeholder="01 KG 777 AAA" />
-
       <label class="lbl">День визита *</label>
-      <select id="cDay" class="inp">
-        <option value="Сегодня">Сегодня</option>
-        <option value="Завтра">Завтра</option>
-        <option value="Послезавтра">Послезавтра</option>
-      </select>
-
+      <select id="cDay" class="inp"><option>Сегодня</option><option>Завтра</option><option>Послезавтра</option></select>
       <label class="lbl">Своё время *</label>
       <div class="row2">
-        <select id="cHour" class="inp">
-          <option>09</option><option>10</option><option>11</option><option>12</option>
-          <option>13</option><option>14</option><option>15</option><option>16</option>
-          <option>17</option><option>18</option><option>19</option><option>20</option>
-        </select>
-        <select id="cMin" class="inp">
-          <option>00</option><option>15</option><option>30</option><option>45</option>
-        </select>
+        <select id="cHour" class="inp"><option>09</option><option>10</option><option>11</option><option>12</option><option>13</option><option>14</option><option>15</option><option>16</option><option>17</option><option>18</option><option>19</option><option>20</option></select>
+        <select id="cMin" class="inp"><option>00</option><option>15</option><option>30</option><option>45</option></select>
       </div>
-
-      <button type="button" class="btn" onclick="sendOrder()">
-        <svg class="ico" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-        <span>Записаться на замену масла</span>
-      </button>
+      <button type="button" class="btn" onclick="sendOrder()"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg><span>Записаться на замену масла</span></button>
     </div>
   </div>
 
   <!-- 2. ОТЗЫВЫ -->
-  <div id="tab-reviews" class="section">
+  <div id="s2" class="section">
     <div class="card">
       <strong>Оставить отзыв и оценку</strong>
       <label class="lbl">Оценка</label>
-      <select id="rStars" class="inp">
-        <option value="5">5 звёзд — Отлично</option>
-        <option value="4">4 звезды — Хорошо</option>
-        <option value="3">3 звезды — Нормально</option>
-      </select>
+      <select id="rStars" class="inp"><option value="5">5 звёзд — Отлично</option><option value="4">4 звезды — Хорошо</option><option value="3">3 звезды — Нормально</option></select>
       <label class="lbl">Ваше имя</label>
       <input type="text" id="rName" class="inp" placeholder="Ваше имя" />
       <label class="lbl">Комментарий</label>
       <textarea id="rText" class="inp" rows="3" placeholder="Напишите ваш отзыв..."></textarea>
       <label class="lbl">Фото или видео</label>
       <input type="file" class="inp" accept="image/*,video/*" />
-      <button type="button" class="btn" onclick="saveReview()">
-        <svg class="ico" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-        <span>Опубликовать отзыв</span>
-      </button>
+      <button type="button" class="btn" onclick="saveRev()">Опубликовать отзыв</button>
     </div>
     <div id="revList"></div>
   </div>
 
-  <!-- 3. ВХОД / БОКС -->
-  <div id="tab-admin" class="section">
+  <!-- 3. ВХОД -->
+  <div id="s3" class="section">
     <div id="loginBox" class="card">
       <strong>Вход для владельца / разработчика</strong>
       <label class="lbl">Логин</label>
-      <input type="text" id="admUser" class="inp" placeholder="Введите логин" autocomplete="off" autocapitalize="none" />
+      <input type="text" id="admUser" class="inp" placeholder="Введите логин" autocapitalize="none" />
       <label class="lbl">Пароль</label>
-      <input type="password" id="admPass" class="inp" placeholder="Введите пароль" autocomplete="off" />
-      <button type="button" class="btn" onclick="loginAdmin()">
-        <svg class="ico" viewBox="0 0 24 24"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
-        <span>Войти</span>
-      </button>
+      <input type="password" id="admPass" class="inp" placeholder="Введите пароль" />
+      <button type="button" class="btn" onclick="loginAdm()">Войти</button>
     </div>
     <div id="adminBox" class="card" style="display:none;">
       <strong>Заявки клиентов</strong>
       <div class="row2">
-        <button type="button" class="btn-sec" onclick="alertMsg('Напоминание владельцу: 40 мин до клиента')">
-          <svg class="ico" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-          <span>40 мин</span>
-        </button>
-        <button type="button" class="btn-sec" onclick="alertMsg('Напоминание владельцу: 20 мин до клиента')">
-          <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          <span>20 мин</span>
-        </button>
+        <button type="button" class="btn-sec" onclick="msg('Напоминание: 40 мин до клиента')">40 мин</button>
+        <button type="button" class="btn-sec" onclick="msg('Напоминание: 20 мин до клиента')">20 мин</button>
       </div>
       <div id="ordList"></div>
     </div>
   </div>
 
   <!-- 4. НАСТРОЙКИ -->
-  <div id="tab-settings" class="section">
+  <div id="s4" class="section">
     <div class="card">
       <strong>Тема оформления</strong>
       <div class="row2">
-        <button type="button" class="btn-sec" onclick="setThemeMode('dark')">
-          <svg class="ico" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-          <span>Темная</span>
-        </button>
-        <button type="button" class="btn-sec" onclick="setThemeMode('light')">
-          <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-          <span>Светлая</span>
-        </button>
+        <button type="button" class="btn-sec" onclick="document.body.classList.remove('light');msg('Темная тема')">Темная</button>
+        <button type="button" class="btn-sec" onclick="document.body.classList.add('light');msg('Светлая тема')">Светлая</button>
       </div>
-      <button type="button" class="btn-sec" onclick="setThemeMode('system')">
-        <svg class="ico" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
-        <span>Системная</span>
-      </button>
+      <button type="button" class="btn-sec" onclick="setSysTheme()">Системная</button>
     </div>
-
     <div class="card">
       <strong>Связаться с владельцем</strong>
       <p class="desc" style="margin-top:6px;">Абдуллажон Халматов: +996 552 202 215</p>
-      <a href="tel:+996552202215" class="btn">
-        <svg class="ico" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-        <span>Позвонить владельцу</span>
-      </a>
+      <a href="tel:+996552202215" class="btn"><svg viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2A19.8 19.8 0 0 1 3 5.2 2 2 0 0 1 5 3h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L9 10.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.8 2z"/></svg><span>Позвонить владельцу</span></a>
     </div>
-
     <div class="card">
       <strong>Техподдержка приложения</strong>
       <p class="desc" style="margin-top:6px;">WhatsApp разработчика: +996 556 50 49 69</p>
-      <textarea id="bugMsg" class="inp" rows="2" style="margin-top:8px;" placeholder="Опишите сбой или ошибку..."></textarea>
-      <button type="button" class="btn-sec" onclick="sendBug()">
-        <svg class="ico" viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-        <span>Написать в WhatsApp</span>
-      </button>
+      <textarea id="bugMsg" class="inp" rows="2" style="margin-top:8px;" placeholder="Опишите проблему..."></textarea>
+      <button type="button" class="btn-sec" onclick="sendBug()">Написать в WhatsApp</button>
     </div>
   </div>
 
   <script>
-    function openTab(name) {
-      var tabs = ['client', 'reviews', 'admin', 'settings'];
-      tabs.forEach(function(t) {
-        document.getElementById('tab-' + t).className = (t === name) ? 'section active' : 'section';
-        document.getElementById('btn-' + t).className = (t === name) ? 'tab-btn active' : 'tab-btn';
-      });
-    }
-
-    function alertMsg(txt) {
+    function msg(txt) {
       var t = document.getElementById('toast');
-      t.textContent = txt;
-      t.style.display = 'block';
+      t.textContent = txt; t.style.display = 'block';
       setTimeout(function(){ t.style.display = 'none'; }, 4000);
     }
-
-    function setThemeMode(m) {
-      if (m === 'light' || (m === 'system' && window.matchMedia('(prefers-color-scheme: light)').matches)) {
-        document.body.classList.add('light');
-      } else {
-        document.body.classList.remove('light');
-      }
-      var names = { dark: 'Темная', light: 'Светлая', system: 'Системная' };
-      alertMsg('Тема обновлена: ' + names[m]);
+    function setSysTheme() {
+      if (window.matchMedia('(prefers-color-scheme: light)').matches) document.body.classList.add('light');
+      else document.body.classList.remove('light');
+      msg('Системная тема');
     }
-    function toggleTheme() { document.body.classList.toggle('light'); }
-
     var orders = JSON.parse(localStorage.getItem('gs_ord') || '[]');
     function sendOrder() {
       var n = document.getElementById('cName').value.trim();
@@ -298,52 +201,52 @@
       var pl = document.getElementById('cPlate').value.trim();
       var d = document.getElementById('cDay').value;
       var tm = document.getElementById('cHour').value + ':' + document.getElementById('cMin').value;
-      if (!n || p.length < 9 || !b || !m || !pl) { alertMsg('Заполните все обязательные поля!'); return; }
-      var o = { n:n, p:p, b:b, m:m, pl:pl, d:d, tm:tm, st:'Ожидает' };
-      orders.unshift(o);
+      if (!n || p.length < 9 || !b || !m || !pl) { msg('Заполните все обязательные поля!'); return; }
+      orders.unshift({ n:n, p:p, b:b, m:m, pl:pl, d:d, tm:tm, st:'Ожидает' });
       localStorage.setItem('gs_ord', JSON.stringify(orders));
       document.getElementById('myOrderBox').style.display = 'block';
       document.getElementById('myOrderText').textContent = b + ' ' + m + ' (' + pl + ') — ' + d + ' в ' + tm;
-      alertMsg('Вы успешно записаны в Garant service!');
+      msg('Вы успешно записаны в Garant service!');
     }
-
-    function loginAdmin() {
-      var u = document.getElementById('admUser').value.trim();
-      var p = document.getElementById('admPass').value.trim();
-      if (u === 'admin' && p === 'GS9082') {
+    function loginAdm() {
+      if (document.getElementById('admUser').value.trim() === 'admin' && document.getElementById('admPass').value.trim() === 'GS9082') {
         document.getElementById('loginBox').style.display = 'none';
         document.getElementById('adminBox').style.display = 'block';
-        renderOrders();
-      } else { alertMsg('Неверный логин или пароль'); }
+        renderOrd();
+      } else { msg('Неверный логин или пароль'); }
     }
-
-    function renderOrders() {
+    function renderOrd() {
       var box = document.getElementById('ordList');
       box.innerHTML = orders.length ? '' : '<p class="desc" style="margin-top:10px;">Заявок пока нет</p>';
       orders.forEach(function(o, i) {
         box.innerHTML += '<div class="item"><b>' + o.b + ' ' + o.m + ' (' + o.pl + ')</b><br>' + o.n + ' • ' + o.p + '<br>Время: <b>' + o.d + ' ' + o.tm + '</b> • ' + o.st +
-        '<button type="button" class="btn-sec" onclick="finishOrder(' + i + ')">Завершить замену</button></div>';
+        '<button type="button" class="btn-sec" onclick="doneOrd(' + i + ')">Завершить замену</button></div>';
       });
     }
-
-    function finishOrder(i) {
-      orders[i].st = 'Готово';
-      localStorage.setItem('gs_ord', JSON.stringify(orders));
-      renderOrders();
-      openTab('reviews');
-      alertMsg('Замена завершена! Оставьте отзыв.');
+    function doneOrd(i) {
+      orders[i].st = 'Готово'; localStorage.setItem('gs_ord', JSON.stringify(orders));
+      renderOrd(); document.getElementById('t2').checked = true; msg('Замена завершена! Оставьте отзыв.');
     }
-
-    function renderStarSvg(count) {
-      var s = '<span class="stars-svg">';
-      for (var k = 0; k < Number(count); k++) {
-        s += '<svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
-      }
-      return s + '</span>';
-    }
-
     var revs = JSON.parse(localStorage.getItem('gs_rev') || '[]');
-    function saveReview() {
+    function saveRev() {
       var txt = document.getElementById('rText').value.trim();
-      if (!txt) { alertMsg('Напишите комментарий'); return; }
-      revs.unshift({ n: document.getElementById('rName').value || 'Клиент', s: documen
+      if (!txt) { msg('Напишите комментарий'); return; }
+      revs.unshift({ n: document.getElementById('rName').value || 'Клиент', s: document.getElementById('rStars').value, t: txt });
+      localStorage.setItem('gs_rev', JSON.stringify(revs));
+      document.getElementById('rText').value = ''; renderRev(); msg('Спасибо за отзыв!');
+    }
+    function renderRev() {
+      var box = document.getElementById('revList'); box.innerHTML = '';
+      revs.forEach(function(r) {
+        box.innerHTML += '<div class="card"><b>' + r.n + '</b> <span style="color:#f59e0b;">' + r.s + ' ★</span><p class="desc" style="margin-top:6px;">' + r.t + '</p></div>';
+      });
+    }
+    renderRev();
+    function sendBug() {
+      var txt = document.getElementById('bugMsg').value.trim() || 'Ошибка в приложении Garant service';
+      window.location.href = 'https://wa.me/996556504969?text=' + encodeURIComponent(txt);
+    }
+  </script>
+</body>
+  </html>
+  
