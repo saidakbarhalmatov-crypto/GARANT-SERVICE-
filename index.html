@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <title>Garant service — Замена масла №1 в Кызыл-Кия</title>
   <style>
     :root, [data-theme="dark"] {
@@ -51,8 +53,17 @@
       background: var(--bg-main);
       color: var(--text-primary);
       min-height: 100vh;
-      padding-bottom: 92px;
+      padding-bottom: 96px;
       transition: background 0.25s ease, color 0.25s ease;
+    }
+
+    /* Защита от выделения текста на кнопках для iPhone / Safari */
+    button, .nav-btn, .chip, .theme-option, .theme-quick-btn, .btn-primary, .btn-secondary, a {
+      -webkit-user-select: none;
+      user-select: none;
+      -webkit-touch-callout: none;
+      touch-action: manipulation;
+      cursor: pointer;
     }
 
     .header {
@@ -90,47 +101,23 @@
       font-size: 18px;
     }
 
-    .brand-info {
-      min-width: 0;
-    }
-
-    .brand-title {
-      font-size: 17px;
-      font-weight: 800;
-      letter-spacing: 0.3px;
-      color: var(--text-primary);
-    }
-
-    .brand-title span {
-      color: var(--gold);
-    }
-
-    .owner-badge {
-      font-size: 11px;
-      color: var(--text-secondary);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      margin-top: 2px;
-    }
+    .brand-info { min-width: 0; }
+    .brand-title { font-size: 17px; font-weight: 800; letter-spacing: 0.3px; color: var(--text-primary); }
+    .brand-title span { color: var(--gold); }
+    .owner-badge { font-size: 11px; color: var(--text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 2px; }
 
     .theme-quick-btn {
       background: var(--bg-input);
       border: 1px solid var(--border);
       color: var(--text-primary);
-      padding: 7px 11px;
+      padding: 8px 12px;
       border-radius: 10px;
       font-size: 12px;
       font-weight: 600;
-      cursor: pointer;
       flex-shrink: 0;
     }
 
-    .container {
-      max-width: 520px;
-      margin: 0 auto;
-      padding: 16px;
-    }
+    .container { max-width: 520px; margin: 0 auto; padding: 16px; }
 
     .hero-card {
       background: linear-gradient(145deg, var(--bg-card), var(--bg-elevated));
@@ -139,71 +126,17 @@
       padding: 18px;
       margin-bottom: 16px;
       box-shadow: var(--shadow);
-      position: relative;
-      overflow: hidden;
     }
 
-    .hero-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-    }
+    .hero-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .city-pill { background: var(--gold-soft); color: var(--gold); font-size: 11px; font-weight: 700; padding: 5px 10px; border-radius: 999px; text-transform: uppercase; }
+    .status-pill { background: var(--green-soft); color: var(--green); font-size: 11px; font-weight: 700; padding: 5px 10px; border-radius: 999px; }
+    .hero-card h1 { font-size: 20px; font-weight: 800; line-height: 1.25; margin-bottom: 8px; }
+    .hero-card p { font-size: 13px; color: var(--text-secondary); line-height: 1.45; margin-bottom: 14px; }
 
-    .city-pill {
-      background: var(--gold-soft);
-      color: var(--gold);
-      font-size: 11px;
-      font-weight: 700;
-      padding: 5px 10px;
-      border-radius: 999px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-
-    .status-pill {
-      background: var(--green-soft);
-      color: var(--green);
-      font-size: 11px;
-      font-weight: 700;
-      padding: 5px 10px;
-      border-radius: 999px;
-    }
-
-    .hero-card h1 {
-      font-size: 20px;
-      font-weight: 800;
-      line-height: 1.25;
-      margin-bottom: 8px;
-    }
-
-    .hero-card p {
-      font-size: 13px;
-      color: var(--text-secondary);
-      line-height: 1.45;
-      margin-bottom: 14px;
-    }
-
-    .stats-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      border-top: 1px solid var(--border);
-      padding-top: 12px;
-      text-align: center;
-    }
-
-    .stat-val {
-      font-size: 14px;
-      font-weight: 800;
-      color: var(--gold);
-    }
-
-    .stat-lbl {
-      font-size: 11px;
-      color: var(--text-secondary);
-      margin-top: 2px;
-    }
+    .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; border-top: 1px solid var(--border); padding-top: 12px; text-align: center; }
+    .stat-val { font-size: 14px; font-weight: 800; color: var(--gold); }
+    .stat-lbl { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
 
     .card {
       background: var(--bg-card);
@@ -214,38 +147,12 @@
       box-shadow: var(--shadow);
     }
 
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 14px;
-    }
+    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
+    .card-title { font-size: 16px; font-weight: 700; }
+    .req-badge { font-size: 11px; background: var(--gold-soft); color: var(--gold); padding: 4px 8px; border-radius: 8px; font-weight: 600; }
 
-    .card-title {
-      font-size: 16px;
-      font-weight: 700;
-    }
-
-    .req-badge {
-      font-size: 11px;
-      background: var(--gold-soft);
-      color: var(--gold);
-      padding: 4px 8px;
-      border-radius: 8px;
-      font-weight: 600;
-    }
-
-    .form-group {
-      margin-bottom: 13px;
-    }
-
-    .form-group label {
-      display: block;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text-secondary);
-      margin-bottom: 6px;
-    }
+    .form-group { margin-bottom: 13px; }
+    .form-group label { display: block; font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 6px; }
 
     .input {
       width: 100%;
@@ -254,113 +161,53 @@
       color: var(--text-primary);
       padding: 12px 14px;
       border-radius: 12px;
-      font-size: 14px;
+      font-size: 16px;
       outline: none;
-      transition: border-color 0.2s;
     }
 
-    .input:focus {
-      border-color: var(--gold);
-    }
+    .input:focus { border-color: var(--gold); }
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
-    .row-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
+    .chips-scroll { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
+    .chip { background: var(--bg-input); border: 1px solid var(--border); color: var(--text-primary); padding: 10px 12px; border-radius: 12px; font-size: 13px; font-weight: 600; white-space: nowrap; flex-shrink: 0; }
+    .chip.active { background: var(--gold); color: #fff; border-color: var(--gold); }
 
-    .chips-scroll {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      padding-bottom: 4px;
-    }
-
-    .chip {
-      background: var(--bg-input);
-      border: 1px solid var(--border);
-      color: var(--text-primary);
-      padding: 9px 12px;
-      border-radius: 12px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      white-space: nowrap;
-      flex-shrink: 0;
-    }
-
-    .chip.active {
-      background: var(--gold);
-      color: #fff;
-      border-color: var(--gold);
-    }
-
-    .time-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 7px;
-      margin-bottom: 8px;
-    }
+    .time-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; margin-bottom: 8px; }
 
     .btn-primary {
       width: 100%;
       background: linear-gradient(135deg, #f59e0b, #d97706);
       color: #fff;
       border: none;
-      padding: 14px;
+      padding: 15px;
       border-radius: 14px;
       font-size: 15px;
       font-weight: 700;
-      cursor: pointer;
       margin-top: 6px;
       box-shadow: 0 6px 18px rgba(245, 158, 11, 0.3);
     }
 
-    .btn-primary:disabled {
-      opacity: 0.45;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
+    .btn-primary:disabled { opacity: 0.45; box-shadow: none; }
 
     .btn-secondary {
       width: 100%;
       background: var(--bg-input);
       color: var(--text-primary);
       border: 1px solid var(--border);
-      padding: 12px;
+      padding: 13px;
       border-radius: 12px;
       font-size: 13px;
       font-weight: 600;
-      cursor: pointer;
       text-align: center;
       text-decoration: none;
       display: block;
     }
 
-    .theme-selector {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-    }
+    .theme-selector { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .theme-option { background: var(--bg-input); border: 1px solid var(--border); color: var(--text-primary); padding: 12px 8px; border-radius: 12px; font-size: 13px; font-weight: 600; text-align: center; }
+    .theme-option.active { border-color: var(--gold); background: var(--gold-soft); color: var(--gold); }
 
-    .theme-option {
-      background: var(--bg-input);
-      border: 1px solid var(--border);
-      color: var(--text-primary);
-      padding: 12px 8px;
-      border-radius: 12px;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      text-align: center;
-    }
-
-    .theme-option.active {
-      border-color: var(--gold);
-      background: var(--gold-soft);
-      color: var(--gold);
-    }
-
+    /* Нижняя панель навигации */
     .bottom-nav {
       position: fixed;
       bottom: 0;
@@ -370,40 +217,35 @@
       border-top: 1px solid var(--border);
       display: grid;
       grid-template-columns: repeat(4, 1fr);
-      padding: 8px 6px 12px;
-      z-index: 50;
+      padding: 10px 6px calc(12px + env(safe-area-inset-bottom));
+      z-index: 90;
     }
 
     .nav-btn {
-      background: none;
+      background: transparent;
       border: none;
       color: var(--text-secondary);
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
       gap: 4px;
       font-size: 11px;
       font-weight: 600;
-      cursor: pointer;
+      padding: 4px 0;
     }
 
-    .nav-btn.active {
-      color: var(--gold);
-    }
+    .nav-btn span { pointer-events: none; }
+    .nav-btn.active { color: var(--gold); }
 
-    .section {
-      display: none;
-    }
-
-    .section.active {
-      display: block;
-    }
+    .section { display: none; }
+    .section.active { display: block; }
 
     .toast {
       position: fixed;
       top: 14px;
       left: 50%;
-      transform: translateX(-50%) translateY(-130%);
+      transform: translateX(-50%) translateY(-150%);
       width: calc(100% - 32px);
       max-width: 480px;
       background: var(--bg-card);
@@ -411,30 +253,15 @@
       color: var(--text-primary);
       padding: 14px 16px;
       border-radius: 16px;
-      z-index: 100;
+      z-index: 120;
       box-shadow: var(--shadow);
       transition: transform 0.35s ease;
     }
+    .toast.show { transform: translateX(-50%) translateY(0); }
 
-    .toast.show {
-      transform: translateX(-50%) translateY(0);
-    }
-
-    .star-row {
-      display: flex;
-      gap: 8px;
-      font-size: 26px;
-      cursor: pointer;
-      margin: 6px 0 12px;
-    }
-
-    .order-item {
-      background: var(--bg-input);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 13px;
-      margin-bottom: 10px;
-    }
+    .star-row { display: flex; gap: 10px; font-size: 28px; margin: 6px 0 12px; }
+    .star-row span { -webkit-user-select: none; user-select: none; cursor: pointer; }
+    .order-item { background: var(--bg-input); border: 1px solid var(--border); border-radius: 14px; padding: 13px; margin-bottom: 10px; }
   </style>
 </head>
 <body>
@@ -452,7 +279,7 @@
         <div class="owner-badge">Владелец: Абдуллажон Халматов</div>
       </div>
     </div>
-    <button class="theme-quick-btn" onclick="cycleTheme()" id="headerThemeBtn">🌓 Тема</button>
+    <button type="button" class="theme-quick-btn" id="headerThemeBtn">🌓 Тема</button>
   </header>
 
   <main class="container">
@@ -488,8 +315,8 @@
         </div>
         <div id="clientOrderInfo" style="font-size:13px; line-height:1.5; margin-bottom:12px;"></div>
         <div class="row-2">
-          <button class="btn-secondary" onclick="triggerReminder(40, 'Клиент')">🔔 Тест 40 мин</button>
-          <button class="btn-secondary" onclick="triggerReminder(20, 'Клиент')">🔥 Тест 20 мин</button>
+          <button type="button" class="btn-secondary" id="btnTest40">🔔 Тест 40 мин</button>
+          <button type="button" class="btn-secondary" id="btnTest20">🔥 Тест 20 мин</button>
         </div>
       </div>
 
@@ -501,46 +328,46 @@
 
         <div class="form-group">
           <label>Имя и Фамилия *</label>
-          <input type="text" id="cName" class="input" placeholder="Например: Азамат Каримов" oninput="validateForm()" />
+          <input type="text" id="cName" class="input" placeholder="Например: Азамат Каримов" />
         </div>
 
         <div class="form-group">
           <label>Ваш номер телефона *</label>
-          <input type="tel" id="cPhone" class="input" value="+996 " placeholder="+996 XXX XXX XXX" oninput="validateForm()" />
+          <input type="tel" id="cPhone" class="input" value="+996 " placeholder="+996 XXX XXX XXX" />
         </div>
 
         <div class="row-2">
           <div class="form-group">
             <label>Марка авто *</label>
-            <input type="text" id="cBrand" class="input" placeholder="Toyota" oninput="validateForm()" />
+            <input type="text" id="cBrand" class="input" placeholder="Toyota" />
           </div>
           <div class="form-group">
             <label>Модель *</label>
-            <input type="text" id="cModel" class="input" placeholder="Camry 70" oninput="validateForm()" />
+            <input type="text" id="cModel" class="input" placeholder="Camry 70" />
           </div>
         </div>
 
         <div class="form-group">
           <label>Государственный номер *</label>
-          <input type="text" id="cPlate" class="input" placeholder="01 KG 777 AAA" style="text-transform:uppercase;" oninput="validateForm()" />
+          <input type="text" id="cPlate" class="input" placeholder="01 KG 777 AAA" style="text-transform:uppercase;" />
         </div>
 
         <div class="form-group">
           <label>Выберите день визита *</label>
           <div class="chips-scroll" id="dayChips"></div>
-          <input type="date" id="cDate" class="input" style="margin-top:8px;" onchange="validateForm()" />
+          <input type="date" id="cDate" class="input" style="margin-top:8px;" />
         </div>
 
         <div class="form-group">
           <label>Выберите своё время *</label>
           <div class="time-grid" id="timeChips"></div>
           <div class="row-2" style="margin-top:6px;">
-            <select id="cHour" class="input" onchange="syncCustomTime()"></select>
-            <select id="cMin" class="input" onchange="syncCustomTime()"></select>
+            <select id="cHour" class="input"></select>
+            <select id="cMin" class="input"></select>
           </div>
         </div>
 
-        <button id="submitBtn" class="btn-primary" disabled onclick="submitOrder()">Записаться на замену масла</button>
+        <button type="button" id="submitBtn" class="btn-primary" disabled>Записаться на замену масла</button>
       </div>
     </section>
 
@@ -551,11 +378,11 @@
           <span class="req-badge">Отзывы клиентов</span>
         </div>
         <div class="star-row" id="starPicker">
-          <span onclick="setStars(1)">★</span>
-          <span onclick="setStars(2)">★</span>
-          <span onclick="setStars(3)">★</span>
-          <span onclick="setStars(4)">★</span>
-          <span onclick="setStars(5)">★</span>
+          <span data-star="1">★</span>
+          <span data-star="2">★</span>
+          <span data-star="3">★</span>
+          <span data-star="4">★</span>
+          <span data-star="5">★</span>
         </div>
         <div class="form-group">
           <label>Ваше имя</label>
@@ -569,9 +396,8 @@
           <label>Прикрепить фото или видео замены</label>
           <input type="file" id="rMedia" class="input" accept="image/*,video/*" />
         </div>
-        <button class="btn-primary" onclick="addReview()">Опубликовать отзыв</button>
+        <button type="button" class="btn-primary" id="btnAddReview">Опубликовать отзыв</button>
       </div>
-
       <div id="reviewsList"></div>
     </section>
 
@@ -582,24 +408,24 @@
         </div>
         <div class="form-group">
           <label>Логин</label>
-          <input type="text" id="loginUser" class="input" placeholder="Введите логин" />
+          <input type="text" id="loginUser" class="input" placeholder="Введите логин" autocapitalize="none" />
         </div>
         <div class="form-group">
           <label>Пароль</label>
           <input type="password" id="loginPass" class="input" placeholder="Введите пароль" />
         </div>
-        <button class="btn-primary" onclick="doLogin()">Войти в режим управления</button>
+        <button type="button" class="btn-primary" id="btnLogin">Войти в режим управления</button>
       </div>
 
       <div id="adminPanel" style="display:none;">
         <div class="card">
           <div class="card-header">
             <span class="card-title">Заявки клиентов</span>
-            <button class="theme-quick-btn" onclick="logoutAdmin()">Выйти</button>
+            <button type="button" class="theme-quick-btn" id="btnLogout">Выйти</button>
           </div>
           <div class="row-2" style="margin-bottom:12px;">
-            <button class="btn-secondary" onclick="triggerReminder(40, 'Владелец')">⏰ Напомнить 40м</button>
-            <button class="btn-secondary" onclick="triggerReminder(20, 'Владелец')">🔥 Напомнить 20м</button>
+            <button type="button" class="btn-secondary" id="btnAdmin40">⏰ Напомнить 40м</button>
+            <button type="button" class="btn-secondary" id="btnAdmin20">🔥 Напомнить 20м</button>
           </div>
           <div id="ordersList"></div>
         </div>
@@ -612,9 +438,9 @@
           <span class="card-title">Оформление приложения</span>
         </div>
         <div class="theme-selector">
-          <button class="theme-option" id="opt-dark" onclick="setTheme('dark')">🌙 Темная</button>
-          <button class="theme-option" id="opt-light" onclick="setTheme('light')">☀️ Светлая</button>
-          <button class="theme-option" id="opt-system" onclick="setTheme('system')">📱 Системная</button>
+          <button type="button" class="theme-option" id="opt-dark" data-mode="dark">🌙 Темная</button>
+          <button type="button" class="theme-option" id="opt-light" data-mode="light">☀️ Светлая</button>
+          <button type="button" class="theme-option" id="opt-system" data-mode="system">📱 Системная</button>
         </div>
       </div>
 
@@ -641,64 +467,76 @@
         <div class="form-group">
           <textarea id="bugText" class="input" rows="3" placeholder="Опишите проблему или ошибку..."></textarea>
         </div>
-        <button class="btn-secondary" onclick="sendBugWhatsApp()">💬 Отправить в WhatsApp разработчику</button>
+        <button type="button" class="btn-secondary" id="btnWhatsAppBug">💬 Отправить в WhatsApp разработчику</button>
       </div>
     </section>
 
   </main>
 
   <nav class="bottom-nav">
-    <button class="nav-btn active" onclick="switchTab('client', this)">
+    <button type="button" class="nav-btn active" data-tab="client">
       <span>📝</span>
       <span>Запись</span>
     </button>
-    <button class="nav-btn" onclick="switchTab('reviews', this)">
+    <button type="button" class="nav-btn" data-tab="reviews">
       <span>⭐</span>
       <span>Отзывы</span>
     </button>
-    <button class="nav-btn" onclick="switchTab('admin', this)">
+    <button type="button" class="nav-btn" data-tab="admin">
       <span>🔐</span>
       <span>Бокс / Вход</span>
     </button>
-    <button class="nav-btn" onclick="switchTab('settings', this)">
+    <button type="button" class="nav-btn" data-tab="settings">
       <span>⚙️</span>
       <span>Настройки</span>
     </button>
   </nav>
 
   <script>
-    let currentThemeMode = localStorage.getItem('gs_theme_mode') || 'system';
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-
-    function applyTheme() {
-      let effective = currentThemeMode;
-      if (currentThemeMode === 'system') {
-        effective = mediaQuery.matches ? 'dark' : 'light';
+    document.addEventListener('DOMContentLoaded', function () {
+      /* --- БЕЗОПАСНОЕ ХРАНИЛИЩЕ ДЛЯ IPHONE SAFARI --- */
+      function getStore(key, def) {
+        try { return localStorage.getItem(key) || def; } catch (e) { return def; }
       }
-      document.documentElement.setAttribute('data-theme', effective);
+      function setStore(key, val) {
+        try { localStorage.setItem(key, val); } catch (e) {}
+      }
 
-      ['dark', 'light', 'system'].forEach(m => {
-        const el = document.getElementById('opt-' + m);
-        if (el) el.classList.toggle('active', currentThemeMode === m);
+      /* --- ТЕМЫ --- */
+      let currentThemeMode = getStore('gs_theme_mode', 'system');
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+      function applyTheme() {
+        let effective = currentThemeMode === 'system' ? (mediaQuery.matches ? 'dark' : 'light') : currentThemeMode;
+        document.documentElement.setAttribute('data-theme', effective);
+        document.querySelectorAll('.theme-option').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.mode === currentThemeMode);
+        });
+        const labels = { dark: '🌙 Темная', light: '☀️ Светлая', system: '📱 Авто' };
+        document.getElementById('headerThemeBtn').textContent = labels[currentThemeMode];
+      }
+
+      function setTheme(mode) {
+        currentThemeMode = mode;
+        setStore('gs_theme_mode', mode);
+        applyTheme();
+      }
+
+      document.getElementById('headerThemeBtn').addEventListener('click', () => {
+        const order = ['dark', 'light', 'system'];
+        setTheme(order[(order.indexOf(currentThemeMode) + 1) % order.length]);
       });
 
-      const labels = { dark: '🌙 Темная', light: '☀️ Светлая', system: '📱 Авто' };
-      document.getElementById('headerThemeBtn').textContent = labels[currentThemeMode];
-    }
+      document.querySelectorAll('.theme-option').forEach(btn => {
+        btn.addEventListener('click', () => setTheme(btn.dataset.mode));
+      });
 
-    function setTheme(mode) {
-      currentThemeMode = mode;
-      localStorage.setItem('gs_theme_mode', mode);
+      if (mediaQuery.addEventListener) {
+        mediaQuery.addEventListener('change', () => { if (currentThemeMode === 'system') applyTheme(); });
+      }
       applyTheme();
-    }
 
-    function cycleTheme() {
-      const order = ['dark', 'light', 'system'];
-      const next = order[(order.indexOf(currentThemeMode) + 1) % order.length];
-      setTheme(next);
-    }
-
-    mediaQuery.addEventListener('change', () => {
-      if (currentThemeMode === 'system') applyTheme();
-    });
-    applyThe
+      /* --- НАВИГАЦИЯ --- */
+      function switchTab(tabId) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        document.querySe
