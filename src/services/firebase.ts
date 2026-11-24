@@ -43,6 +43,13 @@ export function moderateReview(id: string, status: ReviewStatus): Promise<unknow
   return dbRequest(`/reviews/${id}`, 'PATCH', { status, moderatedAt: Date.now() });
 }
 
+export function replyToReview(id: string, adminReply: string): Promise<unknown> {
+  return dbRequest(`/reviews/${id}`, 'PATCH', {
+    adminReply: adminReply.trim(),
+    adminRepliedAt: Date.now(),
+  });
+}
+
 export function deleteReview(id: string): Promise<unknown> {
   return dbRequest(`/reviews/${id}`, 'DELETE');
 }

@@ -1,5 +1,3 @@
-export type ThemeOption = 'dark' | 'yellow' | 'light' | 'ocean' | 'emerald' | 'system';
-
 export type ConnectionState = 'checking' | 'connected' | 'disconnected';
 
 export type OrderStatus = 'Новая' | 'Подтверждена' | 'Выполнено' | 'Отменена';
@@ -26,6 +24,17 @@ export interface Review {
   status: ReviewStatus | string;
   createdAt: number;
   moderatedAt?: number;
+  adminReply?: string;
+  adminRepliedAt?: number;
 }
 
 export type FirebaseMap<T> = Record<string, T | null>;
+
+export interface ServiceItem {
+  id: string;
+  name: string;
+  subtitle: string;
+  description: string;
+  duration: string;
+  image: string;
+}
